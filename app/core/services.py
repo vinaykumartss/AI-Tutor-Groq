@@ -1,5 +1,5 @@
 from app.core.settings import groq_client
-from app.core.prompts import grammar_prompts, sys_msg_prompts
+from app.core.prompts import grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt
 from app.core.harmful_content import contains_harmful_content
 
 
@@ -13,6 +13,21 @@ def check_grammar(text: str) -> str:
 
     return chat_completion.choices[0].message.content.strip()
 
+def translate_text(text: str) -> str: 
+    translation_text = hindi_to_english_translation_prompts(text=text)
+    chat_completion = groq_client.chat.completions.create(
+        messages=[{'role':'user', 'content':translation_text}],
+        model='llama3-70b-8192'
+    )
+    return chat_completion.choices[0].message.content.strip()
+
+def idiom_text(text: str) -> str:
+    hindi_to_english_idiom = hindi_idiom_to_english_prompt(text=text)
+    chat_completion = groq_client.chat.completions.create(
+        messages=[{'role':'user', 'content':hindi_to_english_idiom}],
+        model='llama3-70b-8192'
+    )
+    return chat_completion.choices[0].message.content.strip()
 
 def ai_tutor(prompt: str) -> str:
 
