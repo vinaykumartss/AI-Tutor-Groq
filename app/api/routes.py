@@ -37,5 +37,5 @@ async def api_ai_tutor(input_data: TextInput):
     if input_data.text.lower().strip('?.') == correct_text.lower().strip('?.'):
         appreciateText = random.choice(appreciate_text)
     
-    return {"success": True, "appreciate_text": appreciateText, "text": input_data.text, "correct_text": correct_text, "data": ai_tutor(prompt=correct_text)}
+    return {"success": True, "appreciate_text": appreciateText, "text": input_data.text, "correct_text": correct_text, "data": ai_tutor(prompt=input_data.text)}
     # return success_response(ai_tutor(prompt=correct_text))

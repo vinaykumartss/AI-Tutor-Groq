@@ -15,6 +15,7 @@ def grammar_prompts(text: str) -> str:
         'Instructions:\n'
         '- If the text contains errors, return only the corrected text.\n'
         '- If the text is already correct, return nothing (no output at all).\n'
+        '- If the input text is in Hindi, translate it into English.'
         '- Do not provide any explanations, notes, or comments in any situation.\n\n'
         'If the input text is already correct, return the text as it is, without any explanations or additional comments.\n\n'
         f'{text}\n\nCorrected text:'

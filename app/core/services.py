@@ -2,7 +2,8 @@ from app.core.settings import groq_client
 from app.core.prompts import grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt
 from app.core.harmful_content import contains_harmful_content
 
-
+# Global variable to store the conversation history
+conversation_history = [{'role': 'system', 'content': sys_msg_prompts()}]
 
 def check_grammar(text: str) -> str:
     grammar_prompt = grammar_prompts(text=text)
@@ -31,7 +32,7 @@ def idiom_text(text: str) -> str:
 
 def ai_tutor(prompt: str) -> str:
 
-    convo = [{'role': 'system', 'content': sys_msg_prompts()}]
+    # convo = [{'role': 'system', 'content': sys_msg_prompts()}]
 
     if contains_harmful_content(prompt):
         return (
@@ -40,11 +41,12 @@ def ai_tutor(prompt: str) -> str:
             "Please keep the conversation respectful and focused on these topics."
         )
     
-    convo.append({'role':'user', 'content': prompt})
+     # Append the user's prompt to the conversation history
+    conversation_history.append({'role': 'user', 'content': prompt})
     chat_completion = groq_client.chat.completions.create(
-        messages=convo,
+        messages=conversation_history,
         model='llama3-70b-8192'
     )
     response = chat_completion.choices[0].message
-    convo.append(response)
+    conversation_history.append(response)
     return response.content
