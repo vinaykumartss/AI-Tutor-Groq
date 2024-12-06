@@ -1,5 +1,5 @@
 from app.core.settings import groq_client
-from app.core.prompts import grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt
+from app.core.prompts import grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts
 from app.core.harmful_content import contains_harmful_content
 
 # Global variable to store the conversation history
@@ -57,9 +57,35 @@ def ai_tutor(prompt: str, user_id: str) -> str:
     user_conversations[user_id].append(response)
     return response.content
 
+def ai_interviewer(prompt: str, user_id: str) -> str:
+
+    # Retrieve or initialize conversation history for the user
+    if user_id not in user_conversations: 
+        user_conversations[user_id] = [{'role': 'system', 'content': ai_interviewer_prompts()}]
+
+     # Append user input to conversation history
+    user_conversations[user_id].append({'role': 'user', 'content': prompt})
+
+    # convo.append({'role':'user', 'content': prompt})
+    chat_completion = groq_client.chat.completions.create(
+        messages=user_conversations[user_id],
+        model='llama3-70b-8192'
+    )
+    response = chat_completion.choices[0].message
+    # convo.append(response)
+    user_conversations[user_id].append(response)
+    return response.content
+
 def reset_history(user_id: str):
     if user_id in user_conversations:
         user_conversations[user_id] =[{'role': 'system', 'content': sys_msg_prompts()}]
+        return True
+    # conversation_history = [{'role': 'system', 'content': sys_msg_prompts()}]
+    return False
+
+def reset_history(user_id: str):
+    if user_id in user_conversations:
+        user_conversations[user_id] =[{'role': 'system', 'content': ai_interviewer_prompts()}]
         return True
     # conversation_history = [{'role': 'system', 'content': sys_msg_prompts()}]
     return False
