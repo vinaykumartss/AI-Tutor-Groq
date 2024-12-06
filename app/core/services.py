@@ -30,9 +30,10 @@ def idiom_text(text: str) -> str:
     )
     return chat_completion.choices[0].message.content.strip()
 
-def ai_tutor(prompt: str, user_id: str) -> str:
+# def ai_tutor(prompt: str, user_id: str) -> str:
 
     # convo = [{'role': 'system', 'content': sys_msg_prompts()}]
+    key = f"{user_id}_tutor"
 
     if contains_harmful_content(prompt):
         return (
@@ -41,51 +42,65 @@ def ai_tutor(prompt: str, user_id: str) -> str:
             "Please keep the conversation respectful and focused on these topics."
         )
     # Retrieve or initialize conversation history for the user
-    if user_id not in user_conversations: 
-        user_conversations[user_id] = [{'role': 'system', 'content': sys_msg_prompts()}]
+    if key not in user_conversations:
+        user_conversations[key] = [{'role': 'system', 'content': sys_msg_prompts()}]
 
      # Append user input to conversation history
-    user_conversations[user_id].append({'role': 'user', 'content': prompt})
+    user_conversations[key].append({'role': 'user', 'content': prompt})
 
     # convo.append({'role':'user', 'content': prompt})
     chat_completion = groq_client.chat.completions.create(
-        messages=user_conversations[user_id],
+        messages=user_conversations[key],
         model='llama3-70b-8192'
     )
     response = chat_completion.choices[0].message
     # convo.append(response)
-    user_conversations[user_id].append(response)
+    user_conversations[key].append(response)
+    return response.content
+
+def ai_tutor(prompt: str, user_id: str) -> str:
+    key = f"{user_id}_tutor"
+    if contains_harmful_content(prompt):
+        return "I'm sorry, but I cannot respond to harmful or inappropriate content."
+
+    if key not in user_conversations:
+        user_conversations[key] = [{'role': 'system', 'content': sys_msg_prompts()}]
+
+    user_conversations[key].append({'role': 'user', 'content': prompt})
+    chat_completion = groq_client.chat.completions.create(
+        messages=user_conversations[key],
+        model='llama3-70b-8192'
+    )
+    response = chat_completion.choices[0].message
+    user_conversations[key].append(response)
     return response.content
 
 def ai_interviewer(prompt: str, user_id: str) -> str:
+    key = f"{user_id}_interviewer"
+    if key not in user_conversations:
+        user_conversations[key] = [{'role': 'system', 'content': ai_interviewer_prompts()}]
 
-    # Retrieve or initialize conversation history for the user
-    if user_id not in user_conversations: 
-        user_conversations[user_id] = [{'role': 'system', 'content': ai_interviewer_prompts()}]
-
-     # Append user input to conversation history
-    user_conversations[user_id].append({'role': 'user', 'content': prompt})
-
-    # convo.append({'role':'user', 'content': prompt})
+    user_conversations[key].append({'role': 'user', 'content': prompt})
     chat_completion = groq_client.chat.completions.create(
-        messages=user_conversations[user_id],
+        messages=user_conversations[key],
         model='llama3-70b-8192'
     )
     response = chat_completion.choices[0].message
-    # convo.append(response)
-    user_conversations[user_id].append(response)
+    user_conversations[key].append(response)
     return response.content
 
-def reset_history(user_id: str):
-    if user_id in user_conversations:
-        user_conversations[user_id] =[{'role': 'system', 'content': sys_msg_prompts()}]
+def reset_history(user_id: str, convo_type: str):
+    key = f"{user_id}_{convo_type}"  # Generate the correct key based on user ID and conversation type
+    if key in user_conversations:
+        # Reset the conversation history for the specific conversation type
+        if convo_type == "interviewer":
+            user_conversations[key] = [
+                {'role': 'system', 'content': ai_interviewer_prompts()}
+            ]
+        elif convo_type == "tutor":
+            user_conversations[key] = [
+                {'role': 'system', 'content': sys_msg_prompts()}
+            ]
         return True
-    # conversation_history = [{'role': 'system', 'content': sys_msg_prompts()}]
     return False
 
-def reset_history(user_id: str):
-    if user_id in user_conversations:
-        user_conversations[user_id] =[{'role': 'system', 'content': ai_interviewer_prompts()}]
-        return True
-    # conversation_history = [{'role': 'system', 'content': sys_msg_prompts()}]
-    return False
