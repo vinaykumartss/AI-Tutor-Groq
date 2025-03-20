@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.core.services import check_grammar, ai_tutor, translate_text, idiom_text, reset_history, ai_interviewer
+from app.core.services import check_grammar, ai_tutor, translate_text, idiom_text, reset_history, ai_interviewer,check_pronunciation
 from app.models.text_input import TextInput
 from app.utils.responses import success_response
 from app.core.prompts import appreciate_text
@@ -65,3 +65,17 @@ async def reset_conversation_history(user_id: str, convo_type: str):
         "message": f"Conversation history for '{convo_type}' has been reset successfully."
     }
 
+
+@router.post('/check-pronunciation', tags=["Pronunciation"])
+async def api_check_pronunciation(input_data: TextInput):
+    pronunciation_text = check_pronunciation(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == pronunciation_text.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "pronunciation_text": pronunciation_text
+    }

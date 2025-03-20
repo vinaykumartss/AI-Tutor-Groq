@@ -1,5 +1,5 @@
 from app.core.settings import groq_client
-from app.core.prompts import grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts
+from app.core.prompts import grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts,pronunciation_prompt
 from app.core.harmful_content import contains_harmful_content
 
 # Global variable to store the conversation history
@@ -104,3 +104,13 @@ def reset_history(user_id: str, convo_type: str):
         return True
     return False
 
+
+def check_pronunciation(text: str) -> str:
+    pro_prompt = pronunciation_prompt(text=text)
+
+    chat_completion = groq_client.chat.completions.create(
+        messages=[{'role': 'system', 'content': pro_prompt}],
+        model='llama3-70b-8192'
+    )
+
+    return chat_completion.choices[0].message.content.strip()
