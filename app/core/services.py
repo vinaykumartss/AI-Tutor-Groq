@@ -1,6 +1,7 @@
 from app.core.settings import groq_client
 from app.core.prompts import grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts,pronunciation_prompt
 from app.core.harmful_content import contains_harmful_content
+from app.core.db import *
 
 # Global variable to store the conversation history
 user_conversations = {}
@@ -59,35 +60,21 @@ def idiom_text(text: str) -> str:
     return response.content
 
 def ai_tutor(prompt: str, user_id: str) -> str:
-    key = f"{user_id}_tutor"
-    if contains_harmful_content(prompt):
-        return "I'm sorry, but I cannot respond to harmful or inappropriate content."
-
-    if key not in user_conversations:
-        user_conversations[key] = [{'role': 'system', 'content': sys_msg_prompts()}]
-
-    user_conversations[key].append({'role': 'user', 'content': prompt})
-    chat_completion = groq_client.chat.completions.create(
-        messages=user_conversations[key],
-        model='llama3-70b-8192'
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="tutor",
+        system_prompt_func=sys_msg_prompts
     )
-    response = chat_completion.choices[0].message
-    user_conversations[key].append(response)
-    return response.content
+
 
 def ai_interviewer(prompt: str, user_id: str) -> str:
-    key = f"{user_id}_interviewer"
-    if key not in user_conversations:
-        user_conversations[key] = [{'role': 'system', 'content': ai_interviewer_prompts()}]
-
-    user_conversations[key].append({'role': 'user', 'content': prompt})
-    chat_completion = groq_client.chat.completions.create(
-        messages=user_conversations[key],
-        model='llama3-70b-8192'
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="interviewer",
+        system_prompt_func=ai_interviewer_prompts
     )
-    response = chat_completion.choices[0].message
-    user_conversations[key].append(response)
-    return response.content
 
 def reset_history(user_id: str, convo_type: str):
     key = f"{user_id}_{convo_type}"  # Generate the correct key based on user ID and conversation type
