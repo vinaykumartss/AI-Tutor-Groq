@@ -1,5 +1,5 @@
 from app.core.settings import groq_client
-from app.core.prompts import grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts,pronunciation_prompt
+from app.core.prompts import daily_routing_prompt, grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts,pronunciation_prompt
 from app.core.harmful_content import contains_harmful_content
 from app.core.db import *
 
@@ -75,6 +75,8 @@ def ai_interviewer(prompt: str, user_id: str) -> str:
         role_key="interviewer",
         system_prompt_func=ai_interviewer_prompts
     )
+    
+
 
 def reset_history(user_id: str, convo_type: str):
     key = f"{user_id}_{convo_type}"  # Generate the correct key based on user ID and conversation type
@@ -101,3 +103,101 @@ def check_pronunciation(text: str) -> str:
     )
 
     return chat_completion.choices[0].message.content.strip()
+
+# daily_routine_task
+def daily_routine_task(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="routing",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def about_country(prompt: str, user_id: str) -> str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="country",
+        system_prompt_func=sys_msg_prompts
+    )
+
+
+def ai_role_model(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="role_model",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def ai_social_media(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="social_media",
+        system_prompt_func=sys_msg_prompts
+    )
+
+def ai_childhood_memory(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="childhood_memory",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def ai_hr_interview(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="hr_interview",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def ai_admin_interview(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="admin_interview",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def ai_government_job_interview(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="gov_job_interview",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def ai_customer_care_excutive_interview(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="customer_care_excutive_interview",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def ai_toefl_practice_test(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="toefl_practice_test",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def ai_ielts_practice_test(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="ielts_practice_test",
+        system_prompt_func=sys_msg_prompts
+    )
+    
+def ai_jre_interview(prompt:str,user_id:str)->str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="jre_interview",
+        system_prompt_func=sys_msg_prompts
+    )

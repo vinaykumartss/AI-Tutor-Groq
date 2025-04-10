@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from app.core.services import check_grammar, ai_tutor, translate_text, idiom_text, reset_history, ai_interviewer,check_pronunciation
+from app.core.services import about_country, ai_admin_interview, ai_childhood_memory, ai_customer_care_excutive_interview, ai_government_job_interview, ai_hr_interview, ai_ielts_practice_test, ai_jre_interview, ai_role_model, ai_social_media, ai_toefl_practice_test, check_grammar, ai_tutor, daily_routine_task, translate_text, idiom_text, reset_history, ai_interviewer,check_pronunciation
 from app.models.text_input import TextInput
 from app.utils.responses import success_response
-from app.core.prompts import appreciate_text
+from app.core.prompts import appreciate_text, country_knowledge_prompt, hr_interview_prompt, jre_interview_prompt, role_model_prompt, social_media_prompt
 
 import random
 
@@ -46,7 +46,7 @@ async def api_ai_tutor(input_data: TextInput, user_id):
     }
     # return success_response(ai_tutor(prompt=correct_text))
 
-@router.post('/ai-interviewer/{user_id}', tags=['AI-Tutor'])
+@router.post('/ai-interviewer/{user_id}', tags=['user'])
 async def api_ai_tutor(input_data: TextInput, user_id):
     
     return {
@@ -56,7 +56,6 @@ async def api_ai_tutor(input_data: TextInput, user_id):
     }
     # return success_response(ai_tutor(prompt=correct_text))
 
-
 @router.post('/reset-history/{user_id}/{convo_type}', tags=['AI-Tutor'])
 async def reset_conversation_history(user_id: str, convo_type: str):
     reset_history(user_id=user_id, convo_type=convo_type)
@@ -64,7 +63,7 @@ async def reset_conversation_history(user_id: str, convo_type: str):
         "success": True,
         "message": f"Conversation history for '{convo_type}' has been reset successfully."
     }
-
+    
 
 @router.post('/check-pronunciation', tags=["Pronunciation"])
 async def api_check_pronunciation(input_data: TextInput):
@@ -79,3 +78,192 @@ async def api_check_pronunciation(input_data: TextInput):
         "text": input_data.text,
         "pronunciation_text": pronunciation_text
     }
+    
+@router.post('/daily-routine/{user_id}', tags=["Discuss"])
+async def get_daily_routine_task(input_data: TextInput,user_id):
+    task = check_grammar(input_data.text)
+    
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": daily_routine_task(input_data.text, user_id=user_id)  
+    }
+
+
+@router.post('/about-country/{user_id}', tags=["Discuss"])
+async def api_about_country(input_data: TextInput, user_id: str):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    corrected_text = input_data.text.strip().capitalize()
+    prompt = country_knowledge_prompt(corrected_text)
+    country_data = about_country(prompt, user_id=user_id)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": corrected_text,
+        "data": country_data  
+    }
+
+    
+@router.post('/role-model/{user_id}', tags=["Discuss"])
+async def api_role_model(input_data: TextInput, user_id: str):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    prompt = role_model_prompt(input_data.text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_role_model(prompt, user_id=user_id) 
+    }
+
+    
+@router.post('/social-media/{user_id}', tags=["Discuss"])
+async def api_social_media(input_data: TextInput, user_id: str):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    platform_name = input_data.text.strip()  
+    prompt = social_media_prompt(platform_name)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_social_media(prompt, user_id=user_id)  
+    }
+
+    
+@router.post('/childhood-memory/{user_id}', tags=["Discuss"])
+async def api_childhood_memory(input_data: TextInput,user_id):
+    task = check_grammar(input_data.text)
+    
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_childhood_memory(input_data.text, user_id=user_id)  
+    }
+
+@router.post('/hr-interview/{user_id}', tags=["Interview"])
+async def api_hr_interview(input_data: TextInput, user_id: str):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    prompt = hr_interview_prompt(input_data.text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_hr_interview(prompt, user_id=user_id) 
+    }
+
+    
+@router.post('/admin/{user_id}', tags=["Interview"])
+async def api_admin_interview(input_data: TextInput,user_id):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_admin_interview(input_data.text, user_id=user_id)  
+    }
+    
+@router.post('/government-job/{user_id}', tags=["Interview"])
+async def api_gov_job_interview(input_data: TextInput,user_id):
+    task = check_grammar(input_data.text)
+    
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_government_job_interview(input_data.text, user_id=user_id)  
+    }
+    
+@router.post('/customer-care-excutive/{user_id}', tags=["Interview"])
+async def api_customer_care_excutive_interview(input_data: TextInput,user_id):
+    task = check_grammar(input_data.text)
+    
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_customer_care_excutive_interview(input_data.text, user_id=user_id)  
+    }
+    
+@router.post('/toefl-practice/{user_id}', tags=["Test"])
+async def api_toefl_practice_test(input_data: TextInput,user_id):
+    task = check_grammar(input_data.text)
+    
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_toefl_practice_test(input_data.text, user_id=user_id)  
+    }
+    
+@router.post('/ielts-practice/{user_id}', tags=["Test"])
+async def api_ielts_practice_test(input_data: TextInput,user_id):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_ielts_practice_test(input_data.text, user_id=user_id)  
+    }
+    
+@router.post('/jre/{user_id}', tags=["Interview"])
+async def api_jre_interview(input_data: TextInput, user_id: str):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    platform_name = input_data.text.strip()  
+    prompt = jre_interview_prompt(platform_name)  
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_jre_interview(prompt, user_id=user_id) 
+    }
+    
+    

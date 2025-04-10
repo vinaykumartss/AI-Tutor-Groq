@@ -41,7 +41,7 @@ def get_previous_context(user_id: str, query: str, chat_type: str, top_k_similar
         for doc, meta in zip(all_user_data.get("documents", []), all_user_data.get("metadatas", []))
         if meta.get("chat_type") == chat_type
     ]
-
+ 
     # Step 3: If no past chats in this role, return []
     if not filtered_docs_with_meta:
         return []
@@ -52,7 +52,7 @@ def get_previous_context(user_id: str, query: str, chat_type: str, top_k_similar
         n_results=top_k_similar,
         where={"user_id": user_id}
     )
-
+                                                               
     # Step 5: Again, filter by chat_type manually
     similar_docs = [
         doc for doc, meta in zip(similar_results.get("documents", [[]])[0], similar_results.get("metadatas", [[]])[0])
