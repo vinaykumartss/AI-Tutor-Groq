@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from app.core.services import about_country, ai_admin_interview, ai_childhood_memory, ai_customer_care_excutive_interview, ai_government_job_interview, ai_hr_interview, ai_ielts_practice_test, ai_jre_interview, ai_role_model, ai_social_media, ai_toefl_practice_test, check_grammar, ai_tutor, daily_routine_task, translate_text, idiom_text, reset_history, ai_interviewer,check_pronunciation
+from app.core.services import about_country, ai_bpo_interview, ai_childhood_memory, ai_customer_care, ai_government_job, ai_hobbies_response, ai_hr_interview, ai_ielts_mentor, ai_role_model, ai_social_media, ai_toefl_mentor, check_grammar, ai_tutor, daily_routine_task, translate_text, idiom_text, reset_history, ai_interviewer,check_pronunciation, translate_text_to_hindi
 from app.models.text_input import TextInput
 from app.utils.responses import success_response
-from app.core.prompts import appreciate_text, country_knowledge_prompt, hr_interview_prompt, jre_interview_prompt, role_model_prompt, social_media_prompt
+from app.core.prompts import appreciate_text, bpo_interview_prompt, country_knowledge_prompt, customer_care_prompt, government_job_prompt, hobbies_prompt, hr_interview_prompt, ielts_prompt, role_model_prompt, social_media_prompt, toefl_prompt
 
 import random
 
@@ -28,6 +28,14 @@ async def idiom_fun(input_data: TextInput):
     idiom_response_text = idiom_text(input_data.text)
     return {"success": True,"text": input_data.text, "data": idiom_response_text}
 
+@router.post('/translate-hindi', tags=["Translator"])
+async def translation_text_to_hindi(input_data: TextInput):
+    translated_text = translate_text_to_hindi(input_data.text)
+    return {
+        "success": True,
+        "text": input_data.text,
+        "data": translated_text
+    }
 
 @router.post('/ai-tutor/{user_id}', tags=['AI-Tutor'])
 async def api_ai_tutor(input_data: TextInput, user_id):
@@ -93,7 +101,24 @@ async def get_daily_routine_task(input_data: TextInput,user_id):
         "correct_text": task,
         "data": daily_routine_task(input_data.text, user_id=user_id)  
     }
+    
+@router.post('/hobbies/{user_id}', tags=["Discuss"])
+async def api_hobbies(input_data: TextInput, user_id: str):
+    task = check_grammar(input_data.text)
+    appreciateText = None
 
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+
+    prompt = hobbies_prompt(input_data.text)
+
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_hobbies_response(prompt, user_id=user_id)
+    }
 
 @router.post('/about-country/{user_id}', tags=["Discuss"])
 async def api_about_country(input_data: TextInput, user_id: str):
@@ -176,94 +201,82 @@ async def api_hr_interview(input_data: TextInput, user_id: str):
         "data": ai_hr_interview(prompt, user_id=user_id) 
     }
 
-    
-@router.post('/admin/{user_id}', tags=["Interview"])
-async def api_admin_interview(input_data: TextInput,user_id):
+@router.post('/gov-job/{user_id}', tags=["Interview"])
+async def api_government_job(input_data: TextInput, user_id: str):
     task = check_grammar(input_data.text)
     appreciateText = None
     if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
         appreciateText = random.choice(appreciate_text)
+    prompt = government_job_prompt(input_data.text)
     return {
         "success": True,
         "appreciate_text": appreciateText,
         "text": input_data.text,
         "correct_text": task,
-        "data": ai_admin_interview(input_data.text, user_id=user_id)  
+        "data": ai_government_job(prompt, user_id=user_id)
     }
     
-@router.post('/government-job/{user_id}', tags=["Interview"])
-async def api_gov_job_interview(input_data: TextInput,user_id):
+@router.post('/customer-care/{user_id}', tags=["Interview"])
+async def api_customer_care(input_data: TextInput, user_id: str):
     task = check_grammar(input_data.text)
-    
     appreciateText = None
     if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
         appreciateText = random.choice(appreciate_text)
+    prompt = customer_care_prompt(input_data.text)
     return {
         "success": True,
         "appreciate_text": appreciateText,
         "text": input_data.text,
         "correct_text": task,
-        "data": ai_government_job_interview(input_data.text, user_id=user_id)  
+        "data": ai_customer_care(prompt, user_id=user_id)
     }
     
-@router.post('/customer-care-excutive/{user_id}', tags=["Interview"])
-async def api_customer_care_excutive_interview(input_data: TextInput,user_id):
+@router.post('/bpo-interview/{user_id}', tags=["Interview"])
+async def api_bpo_interview(input_data: TextInput, user_id: str):
     task = check_grammar(input_data.text)
-    
     appreciateText = None
     if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
         appreciateText = random.choice(appreciate_text)
+    prompt = bpo_interview_prompt(input_data.text)
     return {
         "success": True,
         "appreciate_text": appreciateText,
         "text": input_data.text,
         "correct_text": task,
-        "data": ai_customer_care_excutive_interview(input_data.text, user_id=user_id)  
+        "data": ai_bpo_interview(prompt, user_id=user_id)
     }
-    
-@router.post('/toefl-practice/{user_id}', tags=["Test"])
-async def api_toefl_practice_test(input_data: TextInput,user_id):
-    task = check_grammar(input_data.text)
-    
-    appreciateText = None
-    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
-        appreciateText = random.choice(appreciate_text)
+
+@router.post('/toefl-practice/{user_id}', tags=["TEST"])
+async def api_toefl_practice(input_data: TextInput, user_id: str):
+    corrected = check_grammar(input_data.text)
+    appreciate = None
+    if input_data.text.lower().strip('?.') == corrected.lower().strip('?.'):
+        appreciate = random.choice(appreciate_text)
+    prompt = toefl_prompt(input_data.text)
+    response = ai_toefl_mentor(prompt, user_id)
     return {
         "success": True,
-        "appreciate_text": appreciateText,
+        "appreciate_text": appreciate,
         "text": input_data.text,
-        "correct_text": task,
-        "data": ai_toefl_practice_test(input_data.text, user_id=user_id)  
+        "correct_text": corrected,
+        "data": response
     }
     
-@router.post('/ielts-practice/{user_id}', tags=["Test"])
-async def api_ielts_practice_test(input_data: TextInput,user_id):
-    task = check_grammar(input_data.text)
-    appreciateText = None
-    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
-        appreciateText = random.choice(appreciate_text)
+@router.post('/ielts-practice/{user_id}', tags=["TEST"])
+async def api_ielts_practice(input_data: TextInput, user_id: str):
+    corrected = check_grammar(input_data.text)
+    appreciate = None
+    if input_data.text.lower().strip('?.') == corrected.lower().strip('?.'):
+        appreciate = random.choice(appreciate_text)
+    prompt = ielts_prompt(input_data.text)
+    response = ai_ielts_mentor(prompt, user_id)
     return {
         "success": True,
-        "appreciate_text": appreciateText,
+        "appreciate_text": appreciate,
         "text": input_data.text,
-        "correct_text": task,
-        "data": ai_ielts_practice_test(input_data.text, user_id=user_id)  
+        "correct_text": corrected,
+        "data": response
     }
-    
-@router.post('/jre/{user_id}', tags=["Interview"])
-async def api_jre_interview(input_data: TextInput, user_id: str):
-    task = check_grammar(input_data.text)
-    appreciateText = None
-    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
-        appreciateText = random.choice(appreciate_text)
-    platform_name = input_data.text.strip()  
-    prompt = jre_interview_prompt(platform_name)  
-    return {
-        "success": True,
-        "appreciate_text": appreciateText,
-        "text": input_data.text,
-        "correct_text": task,
-        "data": ai_jre_interview(prompt, user_id=user_id) 
-    }
-    
+
+       
     

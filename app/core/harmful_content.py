@@ -3,7 +3,7 @@ harmful_keywords = [
     "offensive", "harassment", "fuck"
 ]
 
-appreciate_text = ['Great Job!', 'Excellent work!', 'Well done!', 'Awesome job!', 'Fantastic effort!', 'You nailed it!', 'Superb performance!', 'Outstanding work!', 'Nice going!', 'You did amazing!', 'Excellent effort!', 'Keep it up!']
+appreciate_text = ['Great Job!', 'Excellent work!', 'Well done!', 'Awesome job!', 'Fantastic effort!', 'You nailed it!', 'Superb performance!', 'Outstanding work!', 'Nice going!', 'You did amazing!', 'Excellent effort!', 'Keep it up!',"You're preparing really well!","Great question — keep practicing!","Fantastic effort. Keep going!"]
 
 def contains_harmful_content(text: str) -> bool:
     return any(keyword in text.lower() for keyword in harmful_keywords)
