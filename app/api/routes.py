@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from app.core.services import about_country, ai_bpo_interview, ai_childhood_memory, ai_customer_care, ai_government_job, ai_hobbies_response, ai_hr_interview, ai_ielts_mentor, ai_role_model, ai_social_media, ai_toefl_mentor, check_grammar, ai_tutor, daily_routine_task, translate_text, idiom_text, reset_history, ai_interviewer,check_pronunciation, translate_text_to_hindi
-from app.models.text_input import TextInput
+from app.core.services import about_country, ai_bpo_interview, ai_childhood_memory, ai_customer_care, ai_government_job, ai_hobbies_response, ai_hr_interview, ai_ielts_mentor, ai_role_model, ai_social_media, ai_toefl_mentor, check_grammar, ai_tutor, daily_routine_task, translate_text, idiom_text, reset_history, ai_interviewer,check_pronunciation, translate_text_to_hindi, translate_text_to_language
+from app.models.text_input import TextInput, TranslateRequest
 from app.utils.responses import success_response
 from app.core.prompts import appreciate_text, bpo_interview_prompt, country_knowledge_prompt, customer_care_prompt, government_job_prompt, hobbies_prompt, hr_interview_prompt, ielts_prompt, role_model_prompt, social_media_prompt, toefl_prompt
 
@@ -35,6 +35,16 @@ async def translation_text_to_hindi(input_data: TextInput):
         "success": True,
         "text": input_data.text,
         "data": translated_text
+    }
+    
+@router.post("/translate-english-to-any", tags=["Translator"])
+async def translation_text_to_language(input_data: TranslateRequest):
+    translated = translate_text_to_language(input_data.text, input_data.target_language)
+    return {
+        "success": True,
+        "text": input_data.text,
+        "target_language": input_data.target_language,
+        "data": translated
     }
 
 @router.post('/ai-tutor/{user_id}', tags=['AI-Tutor'])

@@ -72,6 +72,19 @@ def english_to_hindi_translation_prompt(text: str) -> str:
         f'Input English text:\n{text}\n\nTranslated Hindi text:'
     )
 
+def english_to_target_language_prompt(text: str, target_language: str) -> str:
+    return (
+        f"You are an AI translator. Translate the following English sentence into natural and grammatically correct {target_language}.\n"
+        f"Instructions:\n"
+        f"- Be accurate, natural, and concise.\n"
+        f"- Preserve the meaning and tone.\n"
+        f"- Use native {target_language} phrasing.\n"
+        f"- Do not explain or give extra commentary.\n"
+        f"- Only return the translation.\n"
+        f"- If the input is not English, say: 'Please enter a valid English sentence.'\n\n"
+        f"English Text:\n{text}\n\nTranslation ({target_language}):"
+    )
+
 
 def sys_msg_prompts() -> str:
     return (

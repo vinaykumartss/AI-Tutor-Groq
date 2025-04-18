@@ -1,5 +1,5 @@
 from app.core.settings import groq_client
-from app.core.prompts import english_to_hindi_translation_prompt, grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts,pronunciation_prompt
+from app.core.prompts import english_to_hindi_translation_prompt, english_to_target_language_prompt, grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts,pronunciation_prompt
 from app.core.harmful_content import contains_harmful_content
 from app.core.db import *
 
@@ -39,6 +39,18 @@ def translate_text_to_hindi(text: str) -> str:
         model='llama3-70b-8192'
     )
     return chat_completion.choices[0].message.content.strip()
+
+def translate_text_to_language(text: str, target_language: str) -> str:
+    prompt = english_to_target_language_prompt(text=text, target_language=target_language)
+    
+    chat_completion = groq_client.chat.completions.create(
+        messages=[{"role": "user", "content": prompt}],
+        model="llama3-70b-8192",
+        temperature=0
+    )
+
+    return chat_completion.choices[0].message.content.strip()
+
 
 
 # def ai_tutor(prompt: str, user_id: str) -> str:
