@@ -31,7 +31,7 @@ def store_to_vector_db(user_id: str, role: str, content: str, chat_type: str = "
         embeddings=[embed(content)],
     )
 
-def get_previous_context(user_id: str, query: str, chat_type: str, top_k_similar: int = 20, recent_k: int = 20) -> List[dict]:
+def get_previous_context(user_id: str, query: str, chat_type: str, top_k_similar: int = 10, recent_k: int = 10) -> List[dict]:
     # Step 1: Fetch all documents for this user
     all_user_data = collection.get(where={"user_id": user_id})
 
@@ -85,7 +85,10 @@ def chat_with_memory(
 
     # Step 2: Initialize conversation memory if needed
     if key not in user_conversations:
-        system_prompt = system_prompt_func()
+        if role_key in ['interviewer','tutor']:
+            system_prompt = system_prompt_func()
+        else:
+            system_prompt = system_prompt_func(prompt)
         user_conversations[key] = [{'role': 'system', 'content': system_prompt}]
         if past_messages:
             user_conversations[key].extend(past_messages)
