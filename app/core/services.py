@@ -1,5 +1,5 @@
 from app.core.settings import groq_client
-from app.core.prompts import english_to_hindi_translation_prompt, english_to_target_language_prompt, grammar_prompts, sys_msg_prompts, hindi_to_english_translation_prompts, hindi_idiom_to_english_prompt, ai_interviewer_prompts,pronunciation_prompt
+from app.core.prompts import *
 from app.core.harmful_content import contains_harmful_content
 from app.core.db import *
 
@@ -81,12 +81,13 @@ def translate_text_to_language(text: str, target_language: str) -> str:
     user_conversations[key].append(response)
     return response.content
 
-def ai_tutor(prompt: str, user_id: str) -> str:
+def ai_tutor(prompt: str, user_id: str, new_chat: bool = False) -> str:
     return chat_with_memory(
         prompt=prompt,
         user_id=user_id,
         role_key="tutor",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=sys_msg_prompts,
+        new_chat=new_chat
     )
 
 
@@ -128,11 +129,12 @@ def check_pronunciation(text: str) -> str:
 
 # daily_routine_task
 def daily_routine_task(prompt:str,user_id:str)->str:
+    print(prompt)
     return chat_with_memory(
         prompt=prompt,
         user_id=user_id,
         role_key="routing",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=daily_routing_prompt
     )
     
 def ai_hobbies_response(prompt: str, user_id: str) -> str:
@@ -140,7 +142,7 @@ def ai_hobbies_response(prompt: str, user_id: str) -> str:
         prompt=prompt,
         user_id=user_id,
         role_key="hobbies",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=hobbies_prompt
     )
     
 def about_country(prompt: str, user_id: str) -> str:
@@ -148,7 +150,7 @@ def about_country(prompt: str, user_id: str) -> str:
         prompt=prompt,
         user_id=user_id,
         role_key="country",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=country_knowledge_prompt
     )
 
 
@@ -157,7 +159,7 @@ def ai_role_model(prompt:str,user_id:str)->str:
         prompt=prompt,
         user_id=user_id,
         role_key="role_model",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=role_model_prompt
     )
     
 def ai_social_media(prompt:str,user_id:str)->str:
@@ -165,7 +167,7 @@ def ai_social_media(prompt:str,user_id:str)->str:
         prompt=prompt,
         user_id=user_id,
         role_key="social_media",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=social_media_prompt
     )
 
 def ai_childhood_memory(prompt:str,user_id:str)->str:
@@ -173,7 +175,7 @@ def ai_childhood_memory(prompt:str,user_id:str)->str:
         prompt=prompt,
         user_id=user_id,
         role_key="childhood_memory",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=childhood_memory_prompt
     )
     
 def ai_hr_interview(prompt:str,user_id:str)->str:
@@ -181,7 +183,7 @@ def ai_hr_interview(prompt:str,user_id:str)->str:
         prompt=prompt,
         user_id=user_id,
         role_key="hr_interview",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=hr_interview_prompt
     )
 
 def ai_government_job(prompt: str, user_id: str) -> str:
@@ -189,7 +191,7 @@ def ai_government_job(prompt: str, user_id: str) -> str:
         prompt=prompt,
         user_id=user_id,
         role_key="gov_job",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=government_job_prompt
     )
     
 def ai_customer_care(prompt: str, user_id: str) -> str:
@@ -197,7 +199,7 @@ def ai_customer_care(prompt: str, user_id: str) -> str:
         prompt=prompt,
         user_id=user_id,
         role_key="customer_care",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=customer_care_prompt
     )
     
 def ai_bpo_interview(prompt: str, user_id: str) -> str:
@@ -205,7 +207,7 @@ def ai_bpo_interview(prompt: str, user_id: str) -> str:
         prompt=prompt,
         user_id=user_id,
         role_key="bpo_interview",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=bpo_interview_prompt
     )
     
 def ai_toefl_mentor(prompt: str, user_id: str) -> str:
@@ -213,7 +215,7 @@ def ai_toefl_mentor(prompt: str, user_id: str) -> str:
         prompt=prompt,
         user_id=user_id,
         role_key="toefl_mentor",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=toefl_prompt
     )
     
 def ai_ielts_mentor(prompt: str, user_id: str) -> str:
@@ -221,7 +223,12 @@ def ai_ielts_mentor(prompt: str, user_id: str) -> str:
         prompt=prompt,
         user_id=user_id,
         role_key="ielts_mentor",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=ielts_prompt
     )
 
-    
+def ai_report(user_id: str,role: str) -> str:
+    return conversation_report(
+        user_id=user_id,
+        role_key=role,
+        system_prompt_func=conversation_scoring_prompt
+    )
