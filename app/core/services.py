@@ -40,6 +40,18 @@ def translate_text_to_hindi(text: str) -> str:
     )
     return chat_completion.choices[0].message.content.strip()
 
+def translate_text_to_language(text: str, target_language: str) -> str:
+    prompt = english_to_target_language_prompt(text=text, target_language=target_language)
+    
+    chat_completion = groq_client.chat.completions.create(
+        messages=[{"role": "user", "content": prompt}],
+        model="llama3-70b-8192",
+        temperature=0
+    )
+
+    return chat_completion.choices[0].message.content.strip()
+
+
 
 # def ai_tutor(prompt: str, user_id: str) -> str:
 
