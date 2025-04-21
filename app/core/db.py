@@ -5,6 +5,8 @@ import uuid
 from typing import List
 from app.core.settings import groq_client
 import hashlib
+import json
+import os
 
 # Init Chroma client
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
@@ -76,39 +78,57 @@ def chat_with_memory(
     user_id: str,
     role_key: str,
     system_prompt_func: callable,
-    model_name: str = 'llama3-70b-8192'
+    model_name: str = 'llama3-70b-8192',
+    new_chat: bool = False
 ) -> str:
     key = f"{user_id}_{role_key}"
+    filename = f"{user_id}_{role_key}.json"
+    save_path = os.path.join("conversations", filename)
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+    if new_chat:
+        if os.path.exists(save_path):
+            os.remove(save_path)
 
-    # Step 1: Fetch past context ONLY for this specific API/role
-    past_messages = get_previous_context(user_id, prompt, role_key)
-
-    # Step 2: Initialize conversation memory if needed
+    # Step 1: Initialize conversation memory if needed
     if key not in user_conversations:
-        if role_key in ['interviewer','tutor']:
+        if role_key in ['interviewer', 'tutor']:
             system_prompt = system_prompt_func()
         else:
             system_prompt = system_prompt_func(prompt)
         user_conversations[key] = [{'role': 'system', 'content': system_prompt}]
-        if past_messages:
-            user_conversations[key].extend(past_messages)
 
-    # Step 3: Append user message
+    # Step 2: Append current user message
     user_conversations[key].append({'role': 'user', 'content': prompt})
 
     try:
-        # Step 4: Generate response from LLM
+        # Step 3: Generate response from LLM
         chat_completion = groq_client.chat.completions.create(
             messages=user_conversations[key],
             model=model_name
         )
         response = chat_completion.choices[0].message
 
-        # Step 5: Store to vector DB (include role_key as chat_type)
+        # Step 4: Store to vector DB
         store_to_vector_db(user_id, "user", prompt, chat_type=role_key)
         store_to_vector_db(user_id, "assistant", response.content, chat_type=role_key)
 
-        # Step 6: Append assistant response to memory
+        # Step 5: Append current interaction to user_id_role_key.json
+        new_entry = [
+            {'role': 'user', 'content': prompt},
+            {'role': 'assistant', 'content': response.content}
+        ]
+
+        if os.path.exists(save_path):
+            with open(save_path, 'r') as f:
+                existing_data = json.load(f)
+        else:
+            existing_data = []
+
+        existing_data.extend(new_entry)
+
+        with open(save_path, 'w') as f:
+            json.dump(existing_data, f, indent=2)
+        # Step 6: Update in-memory conversation
         user_conversations[key].append(response)
 
         return response.content
@@ -116,3 +136,54 @@ def chat_with_memory(
     except Exception as e:
         print(f"[ERROR in chat_with_memory ({role_key})]: {e}")
         return "Oops! Something went wrong while generating the response."
+
+def conversation_report(
+    user_id: str,
+    role_key: str,
+    system_prompt_func: callable,
+    model_name: str = 'llama3-70b-8192'
+) -> str:
+    try:
+        # Step 1: Construct file path
+        filename = f"{user_id}_{role_key}.json"
+        file_path = os.path.join("conversations", filename)
+
+        # Step 2: Load the conversation JSON
+        if not os.path.exists(file_path):
+            return f"No conversation found for user: {user_id} and role: {role_key}"
+
+        with open(file_path, 'r') as f:
+            conversation_data = json.load(f)
+
+        # Step 3: Reconstruct user conversation text
+        user_convo_lines = [
+            f"{msg['role'].capitalize()}: {msg['content']}"
+            for msg in conversation_data if msg['role'] in ['user', 'assistant']
+        ]
+        conversation_history = "\n".join(user_convo_lines)
+
+        # Step 4: Build prompt using your scoring prompt function
+        full_prompt = system_prompt_func(conversation_history)
+
+        # Step 5: Send to LLM
+        chat_completion = groq_client.chat.completions.create(
+            messages=[
+                {'role': 'user', 'content': full_prompt}
+            ],
+            model=model_name
+        )
+        response = chat_completion.choices[0].message.content
+        print(response)
+        parsed_data = json.loads(response)
+        print(parsed_data)
+
+        # Step 6: Return raw or parsed JSON (your choice)
+        try:
+            return json.loads(response)
+        except json.JSONDecodeError:
+            # Fallback: just return the raw response
+            return response
+
+    except Exception as e:
+        print(f"[ERROR in conversation_report]: {e}")
+        return "An error occurred while generating the conversation report."

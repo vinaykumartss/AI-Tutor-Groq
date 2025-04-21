@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.core.services import about_country, ai_bpo_interview, ai_childhood_memory, ai_customer_care, ai_government_job, ai_hobbies_response, ai_hr_interview, ai_ielts_mentor, ai_role_model, ai_social_media, ai_toefl_mentor, check_grammar, ai_tutor, daily_routine_task, translate_text, idiom_text, reset_history, ai_interviewer,check_pronunciation, translate_text_to_hindi
+from app.core.services import *
 from app.models.text_input import TextInput
 from app.utils.responses import success_response
 from app.core.prompts import appreciate_text, bpo_interview_prompt, country_knowledge_prompt, customer_care_prompt, government_job_prompt, hobbies_prompt, hr_interview_prompt, ielts_prompt, role_model_prompt, social_media_prompt, toefl_prompt
@@ -50,7 +50,7 @@ async def api_ai_tutor(input_data: TextInput, user_id):
         "appreciate_text": appreciateText, 
         "text": input_data.text, 
         "correct_text": correct_text, 
-        "data": ai_tutor(prompt=input_data.text, user_id= user_id)
+        "data": ai_tutor(prompt=input_data.text, user_id= user_id,new_chat=input_data.new_chat)
     }
     # return success_response(ai_tutor(prompt=correct_text))
 
@@ -278,5 +278,9 @@ async def api_ielts_practice(input_data: TextInput, user_id: str):
         "data": response
     }
 
-       
-    
+@router.post('/ai_report/{user_id}/{role}', tags=['user'])
+async def api_ai_report(user_id,role):
+    return {
+        "success": True,
+        "data": ai_report(user_id=user_id,role=role)
+    }

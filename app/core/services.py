@@ -69,12 +69,13 @@ def translate_text_to_hindi(text: str) -> str:
     user_conversations[key].append(response)
     return response.content
 
-def ai_tutor(prompt: str, user_id: str) -> str:
+def ai_tutor(prompt: str, user_id: str, new_chat: bool = False) -> str:
     return chat_with_memory(
         prompt=prompt,
         user_id=user_id,
         role_key="tutor",
-        system_prompt_func=sys_msg_prompts
+        system_prompt_func=sys_msg_prompts,
+        new_chat=new_chat
     )
 
 
@@ -213,4 +214,9 @@ def ai_ielts_mentor(prompt: str, user_id: str) -> str:
         system_prompt_func=ielts_prompt
     )
 
-    
+def ai_report(user_id: str,role: str) -> str:
+    return conversation_report(
+        user_id=user_id,
+        role_key=role,
+        system_prompt_func=conversation_scoring_prompt
+    )

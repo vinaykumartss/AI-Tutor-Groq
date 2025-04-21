@@ -1,0 +1,582 @@
+{
+	"info": {
+		"_postman_id": "b166a88d-8d44-4065-a13e-8b4d92e1c278",
+		"name": "Fluent AI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "AI Tutor",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"2+3\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/ai-tutor/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ai-tutor",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check-grammar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"mai sabka ghar ja raha hu\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/check-grammar",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"check-grammar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "translation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"haan maine english me likha tha\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/translation",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"translation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "check-pronunciation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"Entrepreneur\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/check-pronunciation",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"check-pronunciation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ai-interviewer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/ai-interviewer/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ai-interviewer",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "idiom",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"ek paresani se nikal kr dusri me fass jana\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/idiom",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"idiom"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "daily-routine",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"what hobby is favorite\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/daily-routine/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"daily-routine",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "about-country",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"USA\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/about-country/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"about-country",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ai_score",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/ai_report/2/tutor",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ai_report",
+						"2",
+						"tutor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ielts-practice",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/ielts-practice/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"ielts-practice",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "toefl-practice",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/toefl-practice/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"toefl-practice",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bpo-interview",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/bpo-interview/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"bpo-interview",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "customer-care",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/customer-care/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"customer-care",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "gov-job",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/gov-job/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"gov-job",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "hr-interview",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/hr-interview/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"hr-interview",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "childhood-memory",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/childhood-memory/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"childhood-memory",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "social-media",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/social-media/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"social-media",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "role-model",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"text\": \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/role-model/2",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"role-model",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

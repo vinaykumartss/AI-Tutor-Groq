@@ -77,6 +77,7 @@ def sys_msg_prompts() -> str:
     return (
         'You are an AI English Tutor named Meera.\n'
         '- Greet new users: "Hi, I’m Meera, your English tutor!"\n'
+        '- Keep responses short (10–12 words max), friendly, and encouraging.\n'
         '- Use conversation history to reply with context. Don’t ask what was discussed before.\n'
         '- If unsure, ask: "Continue where we left off?"\n'
         '- If the user greets you or asks about you, introduce yourself only if new.\n'
@@ -407,20 +408,34 @@ def ielts_prompt(text: str) -> str:
         "- For relevant input: Provide clear, concise answers or IELTS-style practice questions."
     )
 
-def scoring_prompt(conversation_history: str) -> str:
+def conversation_scoring_prompt(conversation_history: str) -> str:
     return (
         "You are an AI Evaluator designed to score the user input based on various linguistic aspects.\n"
         "- Evaluate the entire conversation history for vocabulary diversity, fluency, intonation, and grammar.\n"
         "- Return a score for each aspect: vocabulary, fluency, intonation, and grammar (scale 0-100).\n"
         "- Provide detailed corrections for grammar issues in the conversation.\n"
-        "- Mark the words or phrases that need correction.\n\n"
-        f"User Conversation History: {conversation_history}\n\n"
-        "Responses:\n"
-        "- For vocabulary: Score the variety of vocabulary used.\n"
-        "- For fluency: Score the smoothness and readability of the conversation.\n"
-        "- For intonation: Evaluate the emotional tone or expressiveness of the conversation.\n"
-        "- For grammar: Correct grammar mistakes and provide a score based on correctness.\n"
-        "- Provide the corrected conversation with clear indication of the changes made."
+        "- Mark the words or phrases that need correction.\n"
+        "- Return the final result strictly in JSON format with proper keys and values.\n\n"
+
+        f"User Conversation History:\n{conversation_history}\n\n"
+        "Only provide me the json as a result no other text is required\n"
+        "Your JSON response should follow this format:\n"
+        "{\n"
+        '  "vocabulary_score": 87,\n'
+        '  "fluency_score": 92,\n'
+        '  "intonation_score": 85,\n'
+        '  "grammar_score": 88,\n'
+        '  "grammar_corrections": [\n'
+        '    {\n'
+        '      "original": "He go to school everyday.",\n'
+        '      "corrected": "He goes to school every day."\n'
+        '    },\n'
+        '    {\n'
+        '      "original": "She don\'t like apples.",\n'
+        '      "corrected": "She doesn\'t like apples."\n'
+        '    }\n'
+        '  ],\n'
+        "}\n"
     )
 
 
