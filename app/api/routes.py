@@ -48,7 +48,7 @@ async def translation_text_to_language(input_data: TranslateRequest):
         "data": translated
     }
 
-@router.post("/any_to_any_translate", tags=["Translator"])
+@router.post("/any_to_any_translates", tags=["Translator"])
 async def translate_text_api(input_data: Translate_Many_Request):
     translated = translate_text(input_data.text, input_data.source_language, input_data.target_language)
     return {
