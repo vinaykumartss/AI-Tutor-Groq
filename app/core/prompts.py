@@ -85,6 +85,17 @@ def english_to_target_language_prompt(text: str, target_language: str) -> str:
         f"English Text:\n{text}\n\nTranslation ({target_language}):"
     )
 
+def generic_translation_prompt(text: str, source_language: str, target_language: str) -> str:
+    return (
+        f"You are a highly accurate AI translator. Translate the following text from {source_language} to {target_language}.\n\n"
+        f"Instructions:\n"
+        f"- Translate naturally and correctly.\n"
+        f"- Preserve the tone and meaning.\n"
+        f"- Do not explain anything.\n"
+        f"- Only output the translated sentence.\n\n"
+        f"Input ({source_language}): {text}\n\n"
+        f"Output ({target_language}):"
+    )
 
 def sys_msg_prompts() -> str:
     return (
@@ -201,7 +212,6 @@ def daily_routing_prompt(text: str) -> str:
         "If failed: No problem. Try asking: What is your favorite book?\n"
         "If off-topic: Let’s stay focused on today’s English task. You’ve got this!"
     )
-
     
 def hobbies_prompt(text: str) -> str:
     return (
@@ -218,7 +228,6 @@ def hobbies_prompt(text: str) -> str:
         'Response: What hobby do you enjoy most? Let’s talk about it and improve your English!\n'
         'If there are grammar mistakes, correct them gently and suggest a better sentence.'
     )
-
 
 def country_knowledge_prompt(text: str) -> str:
     return (
@@ -244,9 +253,6 @@ def country_knowledge_prompt(text: str) -> str:
         f"User Input: {text}\n\n"
         "AI Response: "
     )
-
-
-
     
 def role_model_prompt(text: str) -> str:
     return (

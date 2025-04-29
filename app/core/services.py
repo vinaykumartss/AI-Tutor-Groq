@@ -48,10 +48,18 @@ def translate_text_to_language(text: str, target_language: str) -> str:
         model="llama3-70b-8192",
         temperature=0
     )
-
     return chat_completion.choices[0].message.content.strip()
 
+def translate_text(text: str, source_language: str, target_language: str) -> str:
+    prompt = generic_translation_prompt(text, source_language, target_language)
 
+    chat_completion = groq_client.chat.completions.create(
+        messages=[{"role": "user", "content": prompt}],
+        model="llama3-70b-8192",
+        temperature=0
+    )
+
+    return chat_completion.choices[0].message.content.strip()
 
 # def ai_tutor(prompt: str, user_id: str) -> str:
 
