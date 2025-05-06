@@ -48,7 +48,7 @@ async def translation_text_to_language(input_data: TranslateRequest):
         "data": translated
     }
 
-@router.post("/any_to_any_translate", tags=["Translator"])
+@router.post("/translator-to-any", tags=["Translator"])
 async def translate_text_api(input_data: Translate_Many_Request):
     translated = translate_text(input_data.text, input_data.source_language, input_data.target_language)
     return {
@@ -78,10 +78,16 @@ async def api_ai_tutor(input_data: TextInput, user_id):
 
 @router.post('/ai-interviewer/{user_id}', tags=['user'])
 async def api_ai_tutor(input_data: TextInput, user_id):
+    correct_text = check_grammar(input_data.text)
+
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == correct_text.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
     
     return {
         "success": True, 
         "text": input_data.text, 
+        "correct_text": correct_text, 
         "data": ai_interviewer(prompt=input_data.text, user_id= user_id)
     }
     # return success_response(ai_tutor(prompt=correct_text))

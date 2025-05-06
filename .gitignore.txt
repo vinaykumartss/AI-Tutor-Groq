@@ -31,3 +31,11 @@ env/
 # System files
 .DS_Store
 Thumbs.db
+
+# ChromeDb
+chroma.sqlite3
+chroma_db/
+
+__pycache__/
+*.py[cod]
+*.pyc
