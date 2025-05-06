@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  ai-tutor-groq:
+    build:
+      dockerfile: dockerfile
+      context: .
+    container_name: AI-Tutor-Groq
+    restart: always
+    logging:
+      options:
+        max-size: "50m"
+        max-file: "3"
+    ports:
+      - "8000:8000"

@@ -10,3 +10,8 @@ class TranslateRequest(BaseModel):
     
 class TranslateResponse(BaseModel):
     translated_text:str
+
+class Translate_Many_Request(BaseModel):
+    text:str
+    source_language: str
+    target_language:str

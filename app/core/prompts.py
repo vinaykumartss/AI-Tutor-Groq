@@ -85,6 +85,17 @@ def english_to_target_language_prompt(text: str, target_language: str) -> str:
         f"English Text:\n{text}\n\nTranslation ({target_language}):"
     )
 
+def generic_translation_prompt(text: str, source_language: str, target_language: str) -> str:
+    return (
+        f"You are a highly accurate AI translator. Translate the following text from {source_language} to {target_language}.\n\n"
+        f"Instructions:\n"
+        f"- Translate naturally and correctly.\n"
+        f"- Preserve the tone and meaning.\n"
+        f"- Do not explain anything.\n"
+        f"- Only output the translated sentence.\n\n"
+        f"Input ({source_language}): {text}\n\n"
+        f"Output ({target_language}):"
+    )
 
 def sys_msg_prompts() -> str:
     # return ("based on user input respond in 5 words")
@@ -190,6 +201,7 @@ def daily_routing_prompt(text: str) -> str:
         "Response: Give tips, correct errors kindly, and always include a motivational follow-up."
     )
 
+   
 def hobbies_prompt(text: str) -> str:
     return (
         "You are a friendly AI Hobby Guide helping users talk about hobbies and improve English.\n"
@@ -203,7 +215,8 @@ def hobbies_prompt(text: str) -> str:
     )
 
 
-def country_knowledge_prompt(text: str, last_country: str = "") -> str:
+def country_knowledge_prompt(text: str) -> str:
+
     return (
         "You're a friendly geography assistant. Keep answers brief and engaging (max 15 words).\n"
         "If greeted, respond with a hello, introduce yourself, and ask for a country name.\n"
@@ -215,7 +228,8 @@ def country_knowledge_prompt(text: str, last_country: str = "") -> str:
     )
 
 
-def role_model_prompt(user_input: str) -> str:
+def role_model_prompt(text: str) -> str:
+
     return (
         "You are a warm, supportive Role Model Mentor AI.\n"
         "Help users reflect on their role models to grow in English and personally.\n\n"

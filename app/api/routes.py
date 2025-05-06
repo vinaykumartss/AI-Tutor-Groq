@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.core.services import *
-from app.models.text_input import TextInput, TranslateRequest
+from app.models.text_input import TextInput, Translate_Many_Request, TranslateRequest
 
 from app.utils.responses import success_response
 from app.core.prompts import appreciate_text, bpo_interview_prompt, country_knowledge_prompt, customer_care_prompt, government_job_prompt, hobbies_prompt, hr_interview_prompt, ielts_prompt, role_model_prompt, social_media_prompt, toefl_prompt
@@ -48,6 +48,17 @@ async def translation_text_to_language(input_data: TranslateRequest):
         "data": translated
     }
 
+@router.post("/translator-to-any", tags=["Translator"])
+async def translate_text_api(input_data: Translate_Many_Request):
+    translated = translate_text(input_data.text, input_data.source_language, input_data.target_language)
+    return {
+        "success": True,
+        "source_language": input_data.source_language,
+        "target_language": input_data.target_language,
+        "original_text": input_data.text,
+        "translated_text": translated
+    }
+
 @router.post('/ai-tutor/{user_id}', tags=['AI-Tutor'])
 async def api_ai_tutor(input_data: TextInput, user_id):
     correct_text = check_grammar(input_data.text)
@@ -67,10 +78,16 @@ async def api_ai_tutor(input_data: TextInput, user_id):
 
 @router.post('/ai-interviewer/{user_id}', tags=['user'])
 async def api_ai_tutor(input_data: TextInput, user_id):
+    correct_text = check_grammar(input_data.text)
+
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == correct_text.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
     
     return {
         "success": True, 
         "text": input_data.text, 
+        "correct_text": correct_text, 
         "data": ai_interviewer(prompt=input_data.text, user_id= user_id)
     }
     # return success_response(ai_tutor(prompt=correct_text))
