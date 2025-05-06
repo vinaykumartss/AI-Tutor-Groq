@@ -312,3 +312,12 @@ async def api_ai_report(user_id,role):
         "success": True,
         "data": ai_report(user_id=user_id,role=role)
     }
+
+@router.post('/reset-history_vinay/{user_id}/{convo_type}', tags=['AI-Tutor'])
+async def reset_conversation_history(user_id: str, convo_type: str):
+    reset_history(user_id=user_id, convo_type=convo_type)
+    return {
+        "success": True,
+        "message": f"Conversation history for '{convo_type}' has been reset successfully."
+    }
+    

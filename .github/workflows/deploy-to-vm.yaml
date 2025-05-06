@@ -20,7 +20,7 @@ jobs:
       - name: SSH and Run Deployment Script using Password
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /home/AI-Tutor-Groq
+            cd /home/python_app/AI-Tutor-Groq
             bash deploy.sh
           EOF
 
