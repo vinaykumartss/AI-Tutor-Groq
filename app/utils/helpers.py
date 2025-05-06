@@ -84,4 +84,3 @@ Strictly respond only with the JSON object. Do not explain or include anything e
         return data
     except json.JSONDecodeError:
         return {"country": "no", "name": None}
-

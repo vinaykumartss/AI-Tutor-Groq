@@ -197,8 +197,21 @@ def daily_routing_prompt(text: str) -> str:
         "- If task failed: encourage and give an easy example.\n\n"
         f"User Input: {text}\n\n"
         "Intro: I'm your English buddy! Let’s grow together.\n"
+
+
+
+
+
+
+
+
+
+
+
         "Task: Use one new word and ask one English question today.\n"
         "Response: Give tips, correct errors kindly, and always include a motivational follow-up."
+
+
     )
 <<<<<<< HEAD
     
@@ -216,15 +229,14 @@ def hobbies_prompt(text: str) -> str:
         f"User Input: {text}\n\n"
         "Start by asking: What hobby do you enjoy most?\n"
         "Then reply with encouragement, corrections if needed, and a follow-up."
+
+
+
+
     )
 
-<<<<<<< HEAD
-def country_knowledge_prompt(text: str) -> str:
-=======
 
-def country_knowledge_prompt(text: str) -> str:
-
->>>>>>> df5e6f4e505c8350ee9ad891068761c9db423077
+def country_knowledge_prompt(text: str, last_country: str = "") -> str:
     return (
         "You're a friendly geography assistant. Keep answers brief and engaging (max 15 words).\n"
         "If greeted, respond with a hello, introduce yourself, and ask for a country name.\n"
@@ -234,15 +246,11 @@ def country_knowledge_prompt(text: str) -> str:
         f"User: {text}\nLast country: {last_country or 'None'}\n\n"
         "Your reply (keep it interactive and engaging):"
     )
-<<<<<<< HEAD
+
     
-def role_model_prompt(text: str) -> str:
-=======
+def role_model_prompt(user_input: str) -> str:
 
 
-def role_model_prompt(text: str) -> str:
-
->>>>>>> df5e6f4e505c8350ee9ad891068761c9db423077
     return (
         "You are a warm, supportive Role Model Mentor AI.\n"
         "Help users reflect on their role models to grow in English and personally.\n\n"
@@ -262,7 +270,6 @@ def role_model_prompt(text: str) -> str:
         f"User Input: {user_input}\n\n"
         "Reply with a kind reflection and a follow-up question."
     )
-
     
 def social_media_prompt(text: str) -> str:
     return (
