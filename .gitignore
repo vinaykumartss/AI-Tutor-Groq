@@ -13,3 +13,4 @@ app/utils/__pycache__/__init__.cpython-313.pyc
 app/utils/__pycache__/helpers.cpython-313.pyc
 app/utils/__pycache__/responses.cpython-313.pyc
 chroma_db/chroma.sqlite3
+app/api/__pycache__/routes.cpython-313.pyc
