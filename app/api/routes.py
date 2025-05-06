@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.core.services import *
-from app.models.text_input import TextInput, TranslateRequest
+from app.models.text_input import TextInput, Translate_Many_Request, TranslateRequest
 
 from app.utils.responses import success_response
 from app.core.prompts import appreciate_text, bpo_interview_prompt, country_knowledge_prompt, customer_care_prompt, government_job_prompt, hobbies_prompt, hr_interview_prompt, ielts_prompt, role_model_prompt, social_media_prompt, toefl_prompt
@@ -46,6 +46,17 @@ async def translation_text_to_language(input_data: TranslateRequest):
         "text": input_data.text,
         "target_language": input_data.target_language,
         "data": translated
+    }
+
+@router.post("/any_to_any_translate", tags=["Translator"])
+async def translate_text_api(input_data: Translate_Many_Request):
+    translated = translate_text(input_data.text, input_data.source_language, input_data.target_language)
+    return {
+        "success": True,
+        "source_language": input_data.source_language,
+        "target_language": input_data.target_language,
+        "original_text": input_data.text,
+        "translated_text": translated
     }
 
 @router.post('/ai-tutor/{user_id}', tags=['AI-Tutor'])
