@@ -124,8 +124,8 @@ def chat_with_memory(
         response = chat_completion.choices[0].message
 
         # Step 4: Store to vector DB
-        # store_to_vector_db(user_id, "user", prompt, chat_type=role_key)
-        # store_to_vector_db(user_id, "assistant", response.content, chat_type=role_key)
+        store_to_vector_db(user_id, "user", prompt, chat_type=role_key)
+        store_to_vector_db(user_id, "assistant", response.content, chat_type=role_key)
 
         # Step 4: Store interaction to disk
         new_entry = [
