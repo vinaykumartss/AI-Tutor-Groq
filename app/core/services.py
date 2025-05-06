@@ -2,7 +2,9 @@ from app.core.settings import groq_client
 from app.core.prompts import *
 from app.core.harmful_content import contains_harmful_content
 from app.core.db import *
+from app.utils.helpers import *
 
+MODEL_NAME = os.getenv('MODEL_NAME')
 # Global variable to store the conversation history
 user_conversations = {}
 
@@ -10,7 +12,7 @@ def check_grammar(text: str) -> str:
     grammar_prompt = grammar_prompts(text=text)
     chat_completion = groq_client.chat.completions.create(
         messages=[{'role':'system', 'content':grammar_prompt}],
-        model='llama3-70b-8192'
+        model=MODEL_NAME
     )
 
     return chat_completion.choices[0].message.content.strip()
@@ -19,7 +21,7 @@ def translate_text(text: str) -> str:
     translation_text = hindi_to_english_translation_prompts(text=text)
     chat_completion = groq_client.chat.completions.create(
         messages=[{'role':'user', 'content':translation_text}],
-        model='llama3-70b-8192'
+        model=MODEL_NAME
     )
     return chat_completion.choices[0].message.content.strip()
 
@@ -28,7 +30,7 @@ def idiom_text(text: str) -> str:
     hindi_to_english_idiom = hindi_idiom_to_english_prompt(text=text)
     chat_completion = groq_client.chat.completions.create(
         messages=[{'role':'user', 'content':hindi_to_english_idiom}],
-        model='llama3-70b-8192'
+        model=MODEL_NAME
     )
     return chat_completion.choices[0].message.content.strip()
 
@@ -36,7 +38,7 @@ def translate_text_to_hindi(text: str) -> str:
     translation_text = english_to_hindi_translation_prompt(text=text)
     chat_completion = groq_client.chat.completions.create(
         messages=[{'role': 'user', 'content': translation_text}],
-        model='llama3-70b-8192'
+        model=MODEL_NAME
     )
     return chat_completion.choices[0].message.content.strip()
 
@@ -45,7 +47,7 @@ def translate_text_to_language(text: str, target_language: str) -> str:
     
     chat_completion = groq_client.chat.completions.create(
         messages=[{"role": "user", "content": prompt}],
-        model="llama3-70b-8192",
+        model=MODEL_NAME,
         temperature=0
     )
 
@@ -74,7 +76,7 @@ def translate_text_to_language(text: str, target_language: str) -> str:
     # convo.append({'role':'user', 'content': prompt})
     chat_completion = groq_client.chat.completions.create(
         messages=user_conversations[key],
-        model='llama3-70b-8192'
+        model=MODEL_NAME
     )
     response = chat_completion.choices[0].message
     # convo.append(response)
@@ -122,7 +124,7 @@ def check_pronunciation(text: str) -> str:
 
     chat_completion = groq_client.chat.completions.create(
         messages=[{'role': 'system', 'content': pro_prompt}],
-        model='llama3-70b-8192'
+        model=MODEL_NAME
     )
 
     return chat_completion.choices[0].message.content.strip()
@@ -146,12 +148,39 @@ def ai_hobbies_response(prompt: str, user_id: str) -> str:
     )
     
 def about_country(prompt: str, user_id: str) -> str:
-    return chat_with_memory(
-        prompt=prompt,
-        user_id=user_id,
-        role_key="country",
-        system_prompt_func=country_knowledge_prompt
-    )
+    try:
+        country_info = is_country_name(prompt, MODEL_NAME)
+        is_country = country_info.get("country") == "yes"
+        input_country = (country_info.get("name") or "").strip()
+
+        if is_country:
+            stored_country = load_user_country(user_id).strip().lower() if load_user_country(user_id) else None
+            # First-time or country changed — save new country
+            if input_country.lower() != stored_country:
+                save_user_country(user_id, input_country)
+            return chat_with_memory(
+                prompt=prompt,
+                user_id=user_id,
+                role_key="country",
+                system_prompt_func=lambda user_prompt: country_knowledge_prompt(user_prompt, input_country)
+            )
+
+        else:
+            stored_country = load_user_country(user_id)
+            if not stored_country:
+                return "Hi there! Please enter a valid country name to get started."
+
+            modified_prompt = f"User Input : {prompt}, Current Country : {stored_country})"
+            return chat_with_memory(
+                prompt=modified_prompt,
+                user_id=user_id,
+                role_key="country",
+                system_prompt_func=lambda user_prompt: country_knowledge_prompt(modified_prompt, stored_country)
+            )
+
+    except Exception as ex:
+        print("ERROR in COUNTRY API: ", ex)
+        return "Oops! Something went wrong while processing your request."
 
 
 def ai_role_model(prompt:str,user_id:str)->str:

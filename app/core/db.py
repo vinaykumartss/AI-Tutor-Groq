@@ -7,7 +7,7 @@ from app.core.settings import groq_client
 import hashlib
 import json
 import os
-
+import time
 # Init Chroma client
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection("user_conversations")
@@ -82,12 +82,11 @@ def chat_with_memory(
     new_chat: bool = False
 ) -> str:
     key = f"{user_id}_{role_key}"
-    filename = f"{user_id}_{role_key}.json"
+    filename = f"{key}.json"
     save_path = os.path.join("conversations", filename)
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    if new_chat:
-        if os.path.exists(save_path):
-            os.remove(save_path)
+    if new_chat and os.path.exists(save_path):
+        os.remove(save_path)
 
     # Step 1: Initialize conversation memory if needed
     if key not in user_conversations:
@@ -100,19 +99,35 @@ def chat_with_memory(
     # Step 2: Append current user message
     user_conversations[key].append({'role': 'user', 'content': prompt})
 
+    # Step 3: Slice last 5 interactions (+ system)
+    past_messages = user_conversations[key]
+    system_prompt = past_messages[0]
+    interaction_messages = past_messages[1:]  # skip system prompt
+    last_5_interactions = interaction_messages[-10:]  # 5 user-assistant pairs → 10 messages
+
+    messages_for_llm = [system_prompt] + last_5_interactions
     try:
-        # Step 3: Generate response from LLM
+        # start_time = time.time()
         chat_completion = groq_client.chat.completions.create(
-            messages=user_conversations[key],
+            messages=messages_for_llm,
             model=model_name
         )
+        # if hasattr(chat_completion, 'usage'):
+        #     print("Prompt tokens:", chat_completion.usage.prompt_tokens)
+        #     print("Completion tokens:", chat_completion.usage.completion_tokens)
+        #     print("Total tokens:", chat_completion.usage.total_tokens)
+        #
+        # end_time = time.time()
+        # response_time = end_time - start_time
+        # print(f"Response time: {response_time:.4f} seconds")
+
         response = chat_completion.choices[0].message
 
         # Step 4: Store to vector DB
-        store_to_vector_db(user_id, "user", prompt, chat_type=role_key)
-        store_to_vector_db(user_id, "assistant", response.content, chat_type=role_key)
+        # store_to_vector_db(user_id, "user", prompt, chat_type=role_key)
+        # store_to_vector_db(user_id, "assistant", response.content, chat_type=role_key)
 
-        # Step 5: Append current interaction to user_id_role_key.json
+        # Step 4: Store interaction to disk
         new_entry = [
             {'role': 'user', 'content': prompt},
             {'role': 'assistant', 'content': response.content}
@@ -128,8 +143,9 @@ def chat_with_memory(
 
         with open(save_path, 'w') as f:
             json.dump(existing_data, f, indent=2)
-        # Step 6: Update in-memory conversation
-        user_conversations[key].append(response)
+
+        # Step 5: Update full memory (still in memory for long-term)
+        user_conversations[key].extend(new_entry)
 
         return response.content
 
@@ -141,7 +157,7 @@ def conversation_report(
     user_id: str,
     role_key: str,
     system_prompt_func: callable,
-    model_name: str = 'llama3-70b-8192'
+    model_name: str = 'llama3-8b-8192'
 ) -> str:
     try:
         # Step 1: Construct file path
