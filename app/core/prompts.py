@@ -223,7 +223,7 @@ def country_knowledge_prompt(text: str) -> str:
         "When a country is mentioned, share a quick fact (e.g., capital, language), then ask a follow-up.\n"
         "If a follow-up question is asked, answer briefly and prompt with another question.\n"
         "If no country is mentioned, guide the user to enter a country name to start.\n\n"
-        f"User: {text}\nLast country: {last_country or 'None'}\n\n"
+        f"User: {text}\n\n"
         "Your reply (keep it interactive and engaging):"
     )
 
@@ -246,7 +246,7 @@ def role_model_prompt(text: str) -> str:
         "- Want to adopt one of their habits?\n"
         "- Recall a moment they motivated you?\n\n"
         "Start with: \"Who inspires you most? Let's learn from them together!\"\n\n"
-        f"User Input: {user_input}\n\n"
+        f"User Input: {text}\n\n"
         "Reply with a kind reflection and a follow-up question."
     )
 

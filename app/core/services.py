@@ -170,7 +170,7 @@ def about_country(prompt: str, user_id: str) -> str:
                 prompt=prompt,
                 user_id=user_id,
                 role_key="country",
-                system_prompt_func=lambda user_prompt: country_knowledge_prompt(user_prompt, input_country)
+                system_prompt_func=lambda user_prompt: country_knowledge_prompt(user_prompt)
             )
 
         else:
@@ -183,7 +183,7 @@ def about_country(prompt: str, user_id: str) -> str:
                 prompt=modified_prompt,
                 user_id=user_id,
                 role_key="country",
-                system_prompt_func=lambda user_prompt: country_knowledge_prompt(modified_prompt, stored_country)
+                system_prompt_func=lambda user_prompt: country_knowledge_prompt(modified_prompt)
             )
 
     except Exception as ex:
