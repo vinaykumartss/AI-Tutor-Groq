@@ -1,0 +1,34 @@
+[
+  {
+    "role": "user",
+    "content": "string"
+  },
+  {
+    "role": "assistant",
+    "content": "Hi, I\u2019m Meera, your English tutor! What's on your mind?"
+  },
+  {
+    "role": "user",
+    "content": "string"
+  },
+  {
+    "role": "assistant",
+    "content": "Continue where we left off?"
+  },
+  {
+    "role": "user",
+    "content": "kk"
+  },
+  {
+    "role": "assistant",
+    "content": "Want to practice a sentence?"
+  },
+  {
+    "role": "user",
+    "content": "kk"
+  },
+  {
+    "role": "assistant",
+    "content": "Let's try again!"
+  }
+]
