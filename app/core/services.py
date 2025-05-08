@@ -223,6 +223,22 @@ def ai_hr_interview(prompt:str,user_id:str)->str:
         system_prompt_func=hr_interview_prompt
     )
 
+def ai_admin_interview(prompt: str, user_id: str) -> str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="admin_interview",
+        system_prompt_func=admin_interview_prompt
+    )
+
+def ai_jre_interview(prompt: str, user_id: str) -> str:
+    return chat_with_memory(
+        prompt=prompt,
+        user_id=user_id,
+        role_key="jre_interview",
+        system_prompt_func=jre_interview_prompt
+    )
+
 def ai_government_job(prompt: str, user_id: str) -> str:
     return chat_with_memory(
         prompt=prompt,
