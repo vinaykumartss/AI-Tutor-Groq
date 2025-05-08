@@ -229,6 +229,36 @@ async def api_hr_interview(input_data: TextInput, user_id: str):
         "data": ai_hr_interview(prompt, user_id=user_id) 
     }
 
+@router.post('/admin-interview/{user_id}', tags=["Interview"])
+async def api_admin_interview(input_data: TextInput, user_id: str):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    prompt = admin_interview_prompt(input_data.text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_admin_interview(prompt, user_id=user_id)
+    }
+
+@router.post('/jre-interview/{user_id}', tags=["Interview"])
+async def api_jre_interview(input_data: TextInput, user_id: str):
+    task = check_grammar(input_data.text)
+    appreciateText = None
+    if input_data.text.lower().strip('?.') == task.lower().strip('?.'):
+        appreciateText = random.choice(appreciate_text)
+    prompt = jre_interview_prompt(input_data.text)
+    return {
+        "success": True,
+        "appreciate_text": appreciateText,
+        "text": input_data.text,
+        "correct_text": task,
+        "data": ai_jre_interview(prompt, user_id=user_id)
+    }
+
 @router.post('/gov-job/{user_id}', tags=["Interview"])
 async def api_government_job(input_data: TextInput, user_id: str):
     task = check_grammar(input_data.text)
