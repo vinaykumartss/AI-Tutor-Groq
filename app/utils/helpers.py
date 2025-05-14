@@ -51,6 +51,45 @@ def save_user_country(user_id: str, country: str):
 
     with open(COUNTRY_DB, "w") as f:
         json.dump(data, f, indent=2)
+STATE_DB = "state_db.json"  # Define this at the top of your module
+
+def load_user_state(user_id: str) -> str:
+    print(f"Checking if file exists: {os.path.exists(STATE_DB)}")
+
+    if not os.path.exists(STATE_DB):
+        print("State database file doesn't exist.")
+        return None
+
+    try:
+        with open(STATE_DB, "r") as f:
+            data = json.load(f)
+        print(f"Loaded state data: {data}")
+        return data.get(user_id, "")
+    except json.JSONDecodeError:
+        print("Error: Malformed JSON in the state database file.")
+        return None
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return None
+
+
+def save_user_state(user_id: str, state: str):
+    data = {}
+
+    if os.path.exists(STATE_DB):
+        try:
+            with open(STATE_DB, "r") as f:
+                content = f.read().strip()
+                if content:
+                    data = json.loads(content)
+        except json.JSONDecodeError:
+            data = {}
+
+    data[user_id] = state
+
+    with open(STATE_DB, "w") as f:
+        json.dump(data, f, indent=2)
+
 def is_country_name(prompt: str, model_name: str) -> dict:
     country_check_prompt = {
         "messages": [
@@ -58,15 +97,23 @@ def is_country_name(prompt: str, model_name: str) -> dict:
                 "role": "system",
                 "content": (
                     """You are an assistant that only replies in JSON format.
-Your task is to detect whether a specific country name is explicitly mentioned in the user's input.
+Your task is to detect whether a valid country name or state/province name is explicitly mentioned in the user's input.
 
-If the input includes a valid, explicit country name, respond:
-{"country": "yes", "name": "Country Name"}
+Rules:
+- If a valid country is mentioned, set "country": "yes" and provide the name in "country_name".
+- If a valid state or province is mentioned, set "state": "yes" and provide the name in "state_name".
+- If either is missing, use "no" and set name as null.
 
-If no country name is mentioned or the input is vague (e.g., "What is the capital?"), respond:
-{"country": "no", "name": null}
+- Stricly check whether the input contains a valid country name.
 
-Strictly respond only with the JSON object. Do not explain or include anything else."""
+Respond strictly in this JSON format:
+{
+  "country": "yes" or "no",
+  "country_name": "Country Name" or null,
+  "state": "yes" or "no",
+  "state_name": "State or Province Name" or null
+}
+Strictly return only the JSON object. Do not explain."""
                 )
             },
             {"role": "user", "content": prompt}
@@ -74,7 +121,7 @@ Strictly respond only with the JSON object. Do not explain or include anything e
         "model": model_name
     }
 
-    # Get the model's response
+    # Call model
     response = groq_client.chat.completions.create(**country_check_prompt)
     raw = response.choices[0].message.content.strip()
     print("Raw response:", raw)
@@ -83,5 +130,10 @@ Strictly respond only with the JSON object. Do not explain or include anything e
         data = json.loads(raw)
         return data
     except json.JSONDecodeError:
-        return {"country": "no", "name": None}
+        return {
+            "country": "no",
+            "country_name": None,
+            "state": "no",
+            "state_name": None
+        }
 

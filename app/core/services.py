@@ -159,32 +159,43 @@ def about_country(prompt: str, user_id: str) -> str:
     try:
         country_info = is_country_name(prompt, MODEL_NAME)
         is_country = country_info.get("country") == "yes"
-        input_country = (country_info.get("name") or "").strip()
+        input_country = (country_info.get("country_name") or "").strip()
 
-        if is_country:
-            stored_country = load_user_country(user_id).strip().lower() if load_user_country(user_id) else None
-            # First-time or country changed — save new country
-            if input_country.lower() != stored_country:
-                save_user_country(user_id, input_country)
-            return chat_with_memory(
-                prompt=prompt,
-                user_id=user_id,
-                role_key="country",
-                system_prompt_func=lambda user_prompt: country_knowledge_prompt(user_prompt)
-            )
+        is_state = country_info.get("state") == "yes"
+        input_state = (country_info.get("state_name") or "").strip()
 
-        else:
-            stored_country = load_user_country(user_id)
-            if not stored_country:
-                return "Hi there! Please enter a valid country name to get started."
+        stored_country = load_user_country(user_id).strip().lower() if load_user_country(user_id) else None
+        stored_state = load_user_state(user_id).strip().lower() if load_user_state(user_id) else None
 
-            modified_prompt = f"User Input : {prompt}, Current Country : {stored_country})"
-            return chat_with_memory(
-                prompt=modified_prompt,
-                user_id=user_id,
-                role_key="country",
-                system_prompt_func=lambda user_prompt: country_knowledge_prompt(modified_prompt)
-            )
+        # If country is present and different or first-time, update
+        if is_country and input_country.lower() != (stored_country or ""):
+            save_user_country(user_id, input_country)
+
+        # If state is present and different or first-time, update
+        if is_state and input_state.lower() != (stored_state or ""):
+            save_user_state(user_id, input_state)
+
+        # Determine context: use most recent valid country/state
+        final_country = input_country if is_country else load_user_country(user_id)
+        final_state = input_state if is_state else load_user_state(user_id)
+
+        if not final_country and not final_state:
+            return "Hi there! Please mention a country or state to begin."
+
+        # Construct context-aware prompt
+        context_note = []
+        if final_country:
+            context_note.append(f"Country: {final_country}")
+        if final_state:
+            context_note.append(f"State: {final_state}")
+        modified_prompt = f"{prompt} ({', '.join(context_note)})"
+
+        return chat_with_memory(
+            prompt=modified_prompt,
+            user_id=user_id,
+            role_key="country",
+            system_prompt_func=lambda user_prompt: country_knowledge_prompt(user_prompt)
+        )
 
     except Exception as ex:
         print("ERROR in COUNTRY API: ", ex)
