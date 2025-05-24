@@ -3,3 +3,4 @@ fastapi[standard]
 python-dotenv
 chromadb
 sentence-transformers
+cryptography
