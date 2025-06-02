@@ -161,7 +161,7 @@ async def api_about_country(input_data: TextInput, user_id: str):
         "success": True,
         "appreciate_text": appreciateText,
         "text": input_data.text,
-        "correct_text": corrected_text,
+        "correct_text": task,
         "data": country_data  
     }
 
