@@ -7,7 +7,7 @@ from app.core.settings import groq_client
 import hashlib
 import json
 import os
-import time
+from json import JSONDecodeError
 # Init Chroma client
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection("user_conversations")
@@ -158,7 +158,7 @@ def conversation_report(
     role_key: str,
     system_prompt_func: callable,
     model_name: str = 'llama3-8b-8192'
-) -> str:
+) -> dict:
     try:
         # Step 1: Construct file path
         filename = f"{user_id}_{role_key}.json"
@@ -166,7 +166,10 @@ def conversation_report(
 
         # Step 2: Load the conversation JSON
         if not os.path.exists(file_path):
-            return f"No conversation found for user: {user_id} and role: {role_key}"
+            return {
+                "success": False,
+                "error": f"No conversation found for user: {user_id} and role: {role_key}"
+            }
 
         with open(file_path, 'r') as f:
             conversation_data = json.load(f)
@@ -183,23 +186,38 @@ def conversation_report(
 
         # Step 5: Send to LLM
         chat_completion = groq_client.chat.completions.create(
-            messages=[
-                {'role': 'user', 'content': full_prompt}
-            ],
+            messages=[{'role': 'user', 'content': full_prompt}],
             model=model_name
         )
         response = chat_completion.choices[0].message.content
         print(response)
-        parsed_data = json.loads(response)
-        print(parsed_data)
-
-        # Step 6: Return raw or parsed JSON (your choice)
+        # Step 6: Try to parse JSON
         try:
-            return json.loads(response)
-        except json.JSONDecodeError:
-            # Fallback: just return the raw response
-            return response
+            parsed_data = json.loads(response)
+            # If parsed_data already follows your desired structure, return it directly
+            if all(k in parsed_data for k in
+                   ["vocabulary_score", "fluency_score", "intonation_score", "grammar_score", "grammar_corrections"]):
+                return {
+                    "success": True,
+                    "data": parsed_data
+                }
+            else:
+                # If it has its own success/data nesting, flatten it
+                return parsed_data
+
+        except JSONDecodeError:
+            print("[WARNING] Invalid JSON detected. Returning default scores.")
+            return {
+                    "vocabulary_score": 0,
+                    "fluency_score": 0,
+                    "intonation_score": 0,
+                    "grammar_score": 0,
+                    "grammar_corrections": []
+            }
 
     except Exception as e:
         print(f"[ERROR in conversation_report]: {e}")
-        return "An error occurred while generating the conversation report."
+        return {
+            "success": False,
+            "error": "An error occurred while generating the conversation report."
+        }

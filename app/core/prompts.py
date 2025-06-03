@@ -458,6 +458,9 @@ def conversation_scoring_prompt(conversation_history: str) -> str:
 
         f"User Conversation History:\n{conversation_history}\n\n"
         "Only provide me the json as a result no other text is required\n"
+        "Strictly follow valid JSON format — do not add comments, explanations, or extra information.\n"
+        "Do not include annotations like (no correction needed) or any text in parentheses. If no correction is needed, the original and corrected values should simply be identical.\n"
+        "Sometime  (no correction needed) is coming don't add this and apart from result don't add any extra text which impacts the json format."
         "Your JSON response should follow this format:\n"
         "{\n"
         '  "vocabulary_score": 87,\n'
