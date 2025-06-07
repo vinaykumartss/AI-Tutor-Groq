@@ -189,18 +189,26 @@ def conversation_report(
             messages=[{'role': 'user', 'content': full_prompt}],
             model=model_name
         )
-        response = chat_completion.choices[0].message.content
-        print(response)
+        response_text = chat_completion.choices[0].message.content
+        # Step 2: Create new prompt asking LLM to return clean JSON
+        json_correction_prompt = f"""
+        STRICT INSTRUCTION: Respond ONLY with valid JSON. Do not include anything else — no comments, no introductions, no backticks. Just return clean JSON:
+
+        {response_text}
+        """
+        # Step 3: Send the response_text to LLM for JSON correction
+        json_completion = groq_client.chat.completions.create(
+            messages=[{'role': 'user', 'content': json_correction_prompt}],
+            model=model_name
+        )
+        response = json_completion.choices[0].message.content
         # Step 6: Try to parse JSON
         try:
             parsed_data = json.loads(response)
             # If parsed_data already follows your desired structure, return it directly
             if all(k in parsed_data for k in
                    ["vocabulary_score", "fluency_score", "intonation_score", "grammar_score", "grammar_corrections"]):
-                return {
-                    "success": True,
-                    "data": parsed_data
-                }
+                return parsed_data
             else:
                 # If it has its own success/data nesting, flatten it
                 return parsed_data
