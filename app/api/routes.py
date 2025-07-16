@@ -343,11 +343,10 @@ async def api_ai_report(user_id,role):
         "data": ai_report(user_id=user_id,role=role)
     }
 
-@router.post('/reset-history_vinay/{user_id}/{convo_type}', tags=['AI-Tutor'])
-async def reset_conversation_history(user_id: str, convo_type: str):
-    reset_history(user_id=user_id, convo_type=convo_type)
-    return {
-        "success": True,
-        "message": f"Conversation history for '{convo_type}' has been reset successfully."
-    }
+
+@router.post('/image/grammer', tags=["AI-Image"])
+async def ai_image_description_grammar(input_data: str):
+    translated_text = image_description_grammar(input_data)
+    return {"success": True,"text": input_data, "data": translated_text}
+
     

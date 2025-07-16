@@ -3,7 +3,8 @@ from app.core.prompts import *
 from app.core.harmful_content import contains_harmful_content
 from app.core.db import *
 from app.utils.helpers import *
-
+import re
+from difflib import SequenceMatcher
 MODEL_NAME = os.getenv('MODEL_NAME')
 # Global variable to store the conversation history
 user_conversations = {}
@@ -296,3 +297,42 @@ def ai_report(user_id: str,role: str) -> str:
         role_key=role,
         system_prompt_func=conversation_scoring_prompt
     )
+
+def clean_corrected_output(text: str) -> str:
+    return re.sub(r'^["\']|["\']$', '', text.strip())
+
+# 3. Estimate errors using difflib (word-level difference)
+def estimate_error_count(original: str, corrected: str) -> int:
+    matcher = SequenceMatcher(None, original.strip().split(), corrected.strip().split())
+    return len([op for op in matcher.get_opcodes() if op[0] != 'equal'])
+
+# 4. Calculate accuracy based on error count and word count
+def calculate_accuracy(original: str, error_count: int) -> str:
+    words = len(original.strip().split())
+    if words == 0:
+        return "0%"
+    accuracy = ((words - error_count) / words) * 100
+    return f"{accuracy:.2f}%"
+
+# 5. Main function: Get corrected text and compute accuracy
+def image_description_grammar(text: str) -> dict:
+    grammar_prompt = correct_grammar_for_image(text)
+
+    # Call Groq API for corrected text
+    grammar_correct_response = groq_client.chat.completions.create(
+        messages=[{'role': 'system', 'content': grammar_prompt}],
+        model=MODEL_NAME
+    )
+    corrected_text_raw = grammar_correct_response.choices[0].message.content
+    corrected_text = clean_corrected_output(corrected_text_raw)
+
+    # Compute actual error count and accuracy
+    error_count = estimate_error_count(text, corrected_text)
+    accuracy = calculate_accuracy(text, error_count)
+
+    return {
+        "original": text,
+        "corrected": corrected_text,
+        "accuracy": accuracy,
+        "errors": str(error_count)
+    }
