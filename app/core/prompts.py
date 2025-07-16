@@ -480,6 +480,32 @@ def conversation_scoring_prompt(conversation_history: str) -> str:
         "}\n"
     )
 
+def correct_grammar_for_image(text: str) -> str:
+    return (
+        f"Correct the grammar, punctuation, and sentence structure of the following text.\n"
+        f"Respond with only the corrected version, without any explanation or quotation marks.\n\n"
+        f"Text: {text}"
+    )
 
+def accuracy_for_image(text: str) -> str:
+    return (
+        f'Carefully check the following sentence and count only clear grammar or punctuation mistakes.\n'
+        f'Do not count stylistic or subjective errors.\n'
+        f'Respond exactly in this format:\n'
+        f'Accuracy: <percentage>%\nTotal Errors: <number>\n\n'
+        f'Text: {text}'
+    )
+
+def normalize_accuracy_with_word_count(text: str, error_count: str) -> str:
+    try:
+        word_count = len(text.strip().split())
+        error_num = int(error_count.strip())
+        if word_count == 0:
+            return "0%"
+        accuracy = ((word_count - error_num) / word_count) * 100
+        return f"{accuracy:.2f}%"
+    except Exception as e:
+        return "0%"  # fallback
+    
 appreciate_text = ['Great Job!', 'Excellent work!', 'Well done!', 'Awesome job!', 'Fantastic effort!', 'You nailed it!', 'Superb performance!', 'Outstanding work!', 'Nice going!', 'You did amazing!', 'Excellent effort!', 'Keep it up!',"You're preparing really well!","Great question — keep practicing!","Fantastic effort. Keep going!"]
                                                            
