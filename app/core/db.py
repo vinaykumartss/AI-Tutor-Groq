@@ -78,7 +78,7 @@ def chat_with_memory(
     user_id: str,
     role_key: str,
     system_prompt_func: callable,
-    model_name: str = 'llama3-70b-8192',
+    model_name: str = 'openai/gpt-oss-20b',
     new_chat: bool = False
 ) -> str:
     key = f"{user_id}_{role_key}"

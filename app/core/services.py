@@ -58,7 +58,7 @@ def translate_text(text: str, source_language: str, target_language: str) -> str
 
     chat_completion = groq_client.chat.completions.create(
         messages=[{"role": "user", "content": prompt}],
-        model="llama3-70b-8192",
+        model="openai/gpt-oss-20b",
         temperature=0
     )
 
