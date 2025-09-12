@@ -500,6 +500,7 @@ def accuracy_for_image(text: str) -> str:
         f'Text: {text}'
     )
 
+
 def normalize_accuracy_with_word_count(text: str, error_count: str) -> str:
     try:
         word_count = len(text.strip().split())
