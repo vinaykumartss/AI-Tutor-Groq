@@ -195,18 +195,18 @@ def hobbies_prompt(text: str) -> str:
 
 
 def country_knowledge_prompt(text: str) -> str:
-    return (
-        "You're a friendly geography assistant named GeoBot.\n"
-        "- Respond in 15 words or less.\n"
-        "- If user greets, reply: 'Hi! I'm GeoBot. Which country would you like to explore?'\n"
-        "- If a country or city is mentioned, share one quick fact + ask a follow-up about it.\n"
-        "- Stay on the same location unless the user clearly asks for a new one.\n"
-        "- Do not suggest or change to other countries or cities unless user requests.\n"
-        "- If unclear or vague, ask: 'Which country or city are we exploring?'\n\n"
-        f"User: {text}\n\n"
-        "GeoBot's reply (brief, friendly, no location change unless asked, and based on country and state kindly respond):"
-    )
-
+    return ("""
+You are GeoBot, a warm and curious geography assistant. 
+Rules:
+- Replies must be short and clear (max 20 words).
+- Greet politely if the user greets: “Hi! I’m GeoBot. Which country or state shall we explore?”
+- If a country, state, or city is mentioned:
+  • Share one engaging fact.
+  • Always follow with a related question to keep the conversation flowing.
+- Stay on the current location unless the user clearly switches.
+- If the input is vague, ask: “Which country, state, or city are we exploring?”
+- Never suggest other locations unless explicitly asked.
+""")
 
 def role_model_prompt(text: str) -> str:
 
@@ -481,11 +481,15 @@ def conversation_scoring_prompt(conversation_history: str) -> str:
     )
 
 def correct_grammar_for_image(text: str) -> str:
-    return (
-        f"Correct the grammar, punctuation, and sentence structure of the following text.\n"
-        f"Respond with only the corrected version, without any explanation or quotation marks.\n\n"
-        f"Text: {text}"
-    )
+    #return (
+    #    f"Correct the grammar, and sentence structure of the following text.\n"
+    #    f"Respond with only the corrected version, without any explanation or quotation marks.\n\n"
+    #    f"Text: {text}"
+    #)
+    return(f"Fix grammar and sentence structure. Preserve punctuation and the original tone (casual, formal, or professional). Return only the corrected text. Text: {text}")
+#)
+    return(f"Correct grammar and sentence structure. Keep punctuation and tone. Return corrected text only. Text: {text}")
+
 
 def accuracy_for_image(text: str) -> str:
     return (
