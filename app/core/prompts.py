@@ -50,9 +50,10 @@ Response Rules:
 4.	If audio is given, assume it will be transcribed to Hindi text before translation.
 5.	Keep sentence meaning exactly the same, even if wording is slightly adjusted for natural English.
 
+User input: {text}
 """
 
-f'{text}\n\nTranslated text:'
+
     
 
 def hindi_idiom_to_english_prompt(text: str) -> str:
