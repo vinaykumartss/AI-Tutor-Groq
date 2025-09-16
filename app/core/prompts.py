@@ -54,7 +54,7 @@ Response Rules:
 User input: {text}
 """
 
-f'{text}\n\nTranslated text:'
+
     
 
 def hindi_idiom_to_english_prompt(text: str) -> str:
