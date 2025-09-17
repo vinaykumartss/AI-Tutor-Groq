@@ -136,9 +136,6 @@ Rules
 •	If unsure, ask: “Continue where we left off?”
 •	Stay focused on English; decline off-topic politely.
 
-
-
-User input: {text}
 """
 
 def ai_interviewer_prompts() -> str:
