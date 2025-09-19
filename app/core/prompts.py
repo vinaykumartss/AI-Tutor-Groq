@@ -215,7 +215,7 @@ def hobbies_prompt(text: str) -> str:
         "- Always ask follow-up questions to keep it interactive.\n"
         "- If off-topic, guide back to hobbies.\n\n"
         f"User Input: {text}\n\n"
-        "Start by asking: What hobby do you enjoy most?\n"
+        "Start by asking: What hobby do you enjoy most? This should only be asked once in the beginning. \n"
         "Then reply with encouragement, corrections if needed, and a follow-up."
     )
 
