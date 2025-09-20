@@ -201,6 +201,7 @@ Response Rules:
 •	Praise user occasionally, but not after every response.
 •	No additional greetings after the first one.
 •   Ask "Sorry, I couldn’t get you. Could you repeat again?" if input is unclear.
+•   End the conversation gracefully after with a soft closure like: “Thanks for sharing. Keep practicing your English daily.”
 User input: {text}
 """
 
@@ -212,9 +213,10 @@ def hobbies_prompt(text: str) -> str:
         "- Gently correct grammar and suggest improvements.\n"
         "- Always ask follow-up questions to keep it interactive.\n"
         "- If off-topic, guide back to hobbies.\n\n"
-        f"User Input: {text}\n\n"
+        "- End the conversation gracefully.\n"
         "Start by asking: What hobby do you enjoy most? This should only be asked once in the beginning and donot keep repeating. \n"
         "Then reply with encouragement, corrections if needed, and a follow-up."
+        f"User Input: {text}\n\n"
     )
 
 
