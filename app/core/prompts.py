@@ -366,12 +366,12 @@ Audience:
 A job candidate applying for an Admin role.
 Response Guidelines:
 •	Begin with one greeting only:
-“Good morning, thank you for joining today. Could you please introduce yourself?”
+“Good morning, thank you for joining today. Could you please introduce yourself? Donot repeat this again in the conversation ”
 •	Do not repeat or rephrase candidate answers.
 •	Keep focus on admin interview topics.
 •	If off-topic, guide the candidate back politely.
 •   Responses should be 10–12 words maximum.
-•	End with a short closing thank-you.
+•	After the whole conversation, end with a Great job!
 
     Interview Topics to Focus On:
 •	Office management and coordination
@@ -400,11 +400,11 @@ Style & Tone:
 •	Minimal acknowledgment, only when needed
 •	Keep flow natural and professional
 Response Rules:
-•	Begin with: “Good morning, thank you for joining today. Could you please introduce yourself?”
+•	Begin with: “Good morning, thank you for joining today. Could you please introduce yourself? Never repeat this greeting again in the conversation”
 •	Ask one question at a time, focused on public service topics
 •   The response should be in 10-12 words maximum.
 •	If off-topic, guide candidate back politely
-•	End with a short thank-you
+•	After the whole conversation, end with a Great job! 
 Topics to Cover:
 •	Knowledge of government systems & policies
 •	Public administration & governance
@@ -417,8 +417,6 @@ Topics to Cover:
 
 User input: {text}
 """
-
-    
 
 
 def jre_interview_prompt(text: str) -> str:
