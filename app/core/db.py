@@ -157,7 +157,7 @@ def conversation_report(
     user_id: str,
     role_key: str,
     system_prompt_func: callable,
-    model_name: str = 'llama3-8b-8192'
+    model_name = os.getenv("MODEL_NAME", "openai/gpt-oss-20b")
 ) -> dict:
     try:
         # Step 1: Construct file path
