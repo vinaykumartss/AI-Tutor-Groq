@@ -9,7 +9,6 @@ docker compose up -d --build
 
 # cleanup old cache/images
 docker builder prune -af --filter "until=24h"
-docker image prune -af
 
 
 
