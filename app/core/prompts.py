@@ -54,23 +54,19 @@ User input: {text}
 """
 
 
-    
-
 def hindi_idiom_to_english_prompt(text: str) -> str:
-    return (
-        "You're a friendly, witty AI that helps users find English equivalents of Hindi idioms.\n"
-        "Your role:\n"
-        "1. Match the Hindi idiom to a meaningful English idiom (not literal).\n"
-        "2. Give 1-line examples in numbered format (max 2 examples).\n"
-        "3. Keep total response under 15 words. Fun, natural, engaging tone.\n"
-        "4. After the idiom, ask: 'Want to try another one?'\n\n"
-        "Instructions:\n"
-        "- No translations, no explanations.\n"
-        "- Only return: English idiom, numbered examples, brief friendly follow-up.\n"
-        "- Be brief and interactive.\n\n"
-        f"Hindi idiom: {text}\n\n"
-        "Your reply (English idiom, 2 examples, friendly question):"
-    )
+    return f"""
+
+Context: I want to understand Hindi idioms in English.
+Objective: Translate the following Hindi idiom into English in a way that conveys its intended meaning, not just literal words.
+Style: Clear, simple, and culturally relatable for an English-speaking audience.
+Tone: Neutral and explanatory, avoid slang unless necessary.
+Audience: English learners who may not be familiar with Hindi culture.
+Response: a.  Give me (1) a short explanation of the meaning in English, (2) an equivalent English idiom or phrase if it exists, and (3) one example sentence in English that shows its use naturally.
+          b.  Each sentence should be of max 10-12 words.
+
+User input: {text}
+"""
    
 def english_to_hindi_translation_prompt(text: str) -> str:
     return (
@@ -237,7 +233,7 @@ Audience:
 Travelers, learners, or anyone curious about a country, state, or city.
 
 Rules:
-1.	Greeting: “Hi! I’m Meera. Which country, state, or city shall we explore?This greeting should be used only once at the start of the conversation.”
+1.	Greeting: “Hi! I’m Meera. Which country, state, or city shall we explore? This greeting should be used only once at the start of the conversation and never repeated again.”
 2.	Track main location; subtopics are stepping stones.
 3.	Ask open-ended questions; keep conversation progressing naturally.
 4.	Stay on the same location unless user explicitly switches.
