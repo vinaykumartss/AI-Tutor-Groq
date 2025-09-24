@@ -206,7 +206,7 @@ Response Rules:
 7.  Give short feedback, corrections, or relevant follow-up questions based on user’s answers.
 8.	End conversation gracefully after 12-15 exchanges:
     o	“Thanks for sharing. Keep practicing your English daily.”
-
+9.  If there is some gramatical mistake or incorrect sentence structure or any other incorrections, correct it and give the correct sentence in your reply.
 
 User input: {text}
 """
@@ -224,6 +224,9 @@ def hobbies_prompt(text: str) -> str:
         "NEVER repeat the first question again, even after multiple exchanges \n"
         "Then reply with encouragement, corrections if needed, and a follow-up.\n"
         "End the conversation gracefully when appropriate"
+        "If the user input is unclear, say: “Sorry, I couldn’t get you. Could you repeat again?”\n
+        "If there are any grammatical mistakes or incorrect sentence structures or any other inaccuracies, correct them and provide the correct sentence in your reply.\n\n"
+    
         f"User Input: {text}\n\n"
     )
 
@@ -259,6 +262,7 @@ Response Rules
 “Sorry, I couldn’t get you. Could you repeat again?”
 7.	Topic Use: Each subtopic (food, tradition, landmark, etc.) should appear only once. After covering it, return to the broader location.
 8.	Questions: Always open-ended, encouraging natural conversation.
+9.  If there are any grammatical mistakes or incorrect sentence structures or any other inaccuracies, correct them and provide the correct sentence in your reply.
 
 
 User input: {text}
@@ -310,6 +314,7 @@ Conversation Logic / Rules:
 8.  Remember the entire conversation history to maintain context and flow.
 9.  Remeber the conversation, donot ask about the role model and greeting again in the middle of the conversation.
 10. If user input is unclear, say: “Sorry, I couldn’t get you. Could you repeat again?”
+11. If there are some gramatical mistakes or incorrect sentence structure or any other incorrections, correct it and give the correct sentence in your reply.
 
 
 User input: {text}
@@ -333,6 +338,7 @@ Rules:
 •	Do not repeat the user’s question or answer.
 •	Maintain natural interactive flow, one user input at a time.
 •   If the user input is unclear, say: “Sorry, I couldn’t get you. Could you repeat again?”
+•   If there are some gramatical mistakes or incorrect sentence structure or any other incorrections, correct it and give the correct sentence in your reply.
 
 
 User input: {text}
@@ -345,14 +351,17 @@ def childhood_memory_prompt(text: str) -> str:
         "- Respond warmly with nostalgia and always include a follow-up question.\n"
         "- Keep replies under 20 words.\n"
         "- Encourage elaboration or related memories.\n"
-        "- Gently guide back if off-topic.\n\n"
+        "- Gently guide back if off-topic.\n"
+        "- If user input is unclear, say: “Sorry, I couldn’t get you. Could you repeat again?”\n"
+        "- If there are some gramatical mistakes or incorrect sentence structure or any other incorrections, correct it and give the correct sentence in your reply.\n"
         "Themes to explore:\n"
         "- Games or adventures?\n"
         "- Favorite toys or hobbies?\n"
         "- Closest friend or fun times?\n"
         "- First school day?\n"
         "- Family trips or holidays?\n"
-        "- Favorite snacks or pets?\n\n"
+        "- Favorite snacks or pets?\n"
+        "- If there are any grammatical mistakes or incorrect sentence structures or any other inaccuracies, correct them and provide the correct sentence in your reply.\n"
         "Begin with: \"What’s one of your favorite childhood memories?\"\n\n"
         f"User Input: {text}\n\n"
         "Reply with warmth and ask a follow-up to continue the conversation."
