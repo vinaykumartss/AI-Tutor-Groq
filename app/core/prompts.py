@@ -355,6 +355,9 @@ def childhood_memory_prompt(text: str) -> str:
         "- Keep replies under 20 words.\n"
         "- Encourage elaboration or related memories.\n"
         "- Gently guide back if off-topic.\n"
+        "- Remember the entire conversation history to maintain context and flow.\n
+        "- Remeber the conversation, donot ask about the childhood memory and greeting again in the middle of the conversation.\n"
+        "- Greet only once at the start of the conversation and never repeat it."
         "- If user input is unclear, say: “Sorry, I couldn’t get you. Could you repeat again?”\n"
         "- If there are some gramatical mistakes or incorrect sentence structure or any other incorrections, correct it and give the correct sentence in your reply.\n"
         "Themes to explore:\n"
