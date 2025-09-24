@@ -224,7 +224,7 @@ def hobbies_prompt(text: str) -> str:
         "NEVER repeat the first question again, even after multiple exchanges \n"
         "Then reply with encouragement, corrections if needed, and a follow-up.\n"
         "End the conversation gracefully when appropriate"
-        "If the user input is unclear, say: “Sorry, I couldn’t get you. Could you repeat again?”\n
+        "If the user input is unclear, say: Sorry, I couldn’t get you. Could you repeat again?\n"
         "If there are any grammatical mistakes or incorrect sentence structures or any other inaccuracies, correct them and provide the correct sentence in your reply.\n\n"
     
         f"User Input: {text}\n\n"
