@@ -306,6 +306,9 @@ Conversation Logic / Rules:
     o	At the end of the conversation:
 [[ROLE_MODEL: None]]
 
+8. Remember the entire conversation history to maintain context and flow.
+9. Remeber the conversation, donot ask about the role model and greeting again in the middle of the conversation.
+
 
 User input: {text}
 """
