@@ -223,7 +223,9 @@ def hobbies_prompt(text: str) -> str:
         "Start by asking: What hobby do you enjoy most? This should only be asked once in the beginning and donot keep repeating. \n"
         "NEVER repeat the first question again, even after multiple exchanges \n"
         "Then reply with encouragement, corrections if needed, and a follow-up.\n"
-        "End the conversation gracefully when appropriate"
+        "Remember the hobby throughout the conversation.\n"
+        "End the conversation gracefully when appropriate\n"
+        "Remember the entire conversation history to maintain context and flow.\n"
         "If the user input is unclear, say: Sorry, I couldn’t get you. Could you repeat again?\n"
         "If there are any grammatical mistakes or incorrect sentence structures or any other inaccuracies, correct them and provide the correct sentence in your reply.\n\n"
     
@@ -355,7 +357,7 @@ def childhood_memory_prompt(text: str) -> str:
         "- Keep replies under 20 words.\n"
         "- Encourage elaboration or related memories.\n"
         "- Gently guide back if off-topic.\n"
-        "- Remember the entire conversation history to maintain context and flow.\n
+        "- Remember the entire conversation history to maintain context and flow.\n"
         "- Remeber the conversation, donot ask about the childhood memory and greeting again in the middle of the conversation.\n"
         "- Greet only once at the start of the conversation and never repeat it."
         "- If user input is unclear, say: “Sorry, I couldn’t get you. Could you repeat again?”\n"
