@@ -572,7 +572,7 @@ AI: “What motivated you to pursue graduate studies abroad?”
 Candidate: “[answers]”
 AI: “How are you preparing for the GRE verbal section?”
 Candidate: “[answers]”
-AI: “Great job, thank you for your time today.”
+
 
 User input: {text}
 
@@ -635,7 +635,7 @@ AI: “How do you handle an angry or frustrated customer call?”
 Candidate: “[answers]”
 AI: “Are you comfortable working night shifts or rotating schedules?”
 Candidate: “[answers]”
-AI: “Great job, thank you for your time today.”
+
 
 User input: {text}
 
@@ -678,7 +678,7 @@ AI: “What extracurricular activity would you join if you studied abroad?”
 Candidate: “[answers]”
 AI: “Summarize a lecture on climate change in your own words.”
 Candidate: “[answers]”
-AI: “Great job, thank you for your time today.”
+
 
 
 User input: {text}
