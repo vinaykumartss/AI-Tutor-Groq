@@ -58,21 +58,48 @@ def hindi_idiom_to_english_prompt(text: str) -> str:
     return f"""
 
 Context: I want to understand Hindi idioms in English.
-Objective: Translate a Hindi idiom into English, conveying its intended meaning, not just literal words.
-Style: Clear, simple, culturally relatable for English speakers.
+Objective: Translate the following Hindi idiom into English in a way that conveys its intended meaning, not just literal words.
+Style: Clear, simple, and culturally relatable for an English-speaking audience.
 Tone: Neutral and explanatory.
-Audience: English learners unfamiliar with Hindi culture.
-Output Format: Three arrays – one for meaning, one for equivalent English idiom/phrase (if any), one for an example sentence in natural English. Keep output as short as possible.
-Input: [Insert Hindi Idiom Here]
-Example:
-Input: “उल्टा चोर कोतवाल को डाँटे”
-Output:
-["A wrongdoer blaming authority instead of admitting fault"]  
-["The pot calling the kettle black"]  
-["He was caught stealing, yet he scolded the shopkeeper"]  
+Audience: English learners who may not be familiar with Hindi culture.
+Response: Provide (1) the meaning, (2) an equivalent English idiom/phrase if it exists, and (3) an example sentence in English that shows natural usage. Reponse should be of maximum 25-30 words.
+________________________________________
+Examples: 
+1. Input: “नाच न जाने आँगन टेढ़ा”
 
+["Someone incompetent at a task, yet blaming circumstances for failure"]  
+["Can't dance but blames the floor"]  
+["She failed the exam but blamed the questions instead"]
 
+2.Input: “नाक कटना”
 
+["To be embarrassed or humiliated"]  
+["To lose face"]  
+["He lied in front of everyone and got completely embarrassed"]
+
+3. Input: “अंधेर नगरी चौपट राजा”
+
+["A place or situation of chaos due to bad leadership"]  
+["A kingdom of darkness under a foolish ruler"]  
+["The office was so disorganized, it was like a kingdom of darkness under a foolish ruler"]
+
+4. Input: “घर का भेदी लंका ढाए”
+
+["An insider causing damage to their own group or family"]  
+["A traitor within the house brings downfall"]  
+["He leaked company secrets—truly, a traitor within the house brings downfall"]
+
+5. Input: “दूध का जला छाछ भी फूँक फूँक कर पीता है”
+
+["Someone becomes overly cautious after a bad experience"]  
+["Once bitten, twice shy"]  
+["After failing his first exam, he studied every line carefully—once bitten, twice shy"]
+
+6. Input: “ऊँची दुकान फीका पकवान”
+
+["Something that looks impressive outside but is disappointing in reality"]  
+["All that glitters is not gold"]  
+["The hotel looked fancy, but the food was terrible—all that glitters is not gold"]
 
 User input: {text}
 """
