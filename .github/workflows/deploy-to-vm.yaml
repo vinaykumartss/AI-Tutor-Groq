@@ -3,7 +3,7 @@ name: Deploy to Production
 on:
   push:
     branches:
-      - production
+      - development
 
 jobs:
   deploy:
@@ -19,7 +19,7 @@ jobs:
 
       - name: SSH and Run Deployment Script using Password
         run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          sshpass -p "${{ secrets.DEV_SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.DEV_SSH_USER }}@${{ secrets.DEV_SSH_HOST }} << 'EOF'
             cd /home/python_app/AI-Tutor-Groq
             bash deploy.sh
           EOF
